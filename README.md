@@ -7,6 +7,7 @@ Application React (Vite + TypeScript) pour les parcours **entreprise**, **foncti
 Copiez `.env.example` vers `.env.local` et définissez :
 
 - `VITE_API_URL` — URL de base de l’API (ex. `http://localhost:4000/api`). Sans cette variable, le build utilise le défaut local `http://localhost:4000/api`.
+- `JOBETU_PAYDUNYA_WEBHOOK_TARGET` — **Vercel uniquement** (variable serveur, pas `VITE_*`) : URL complète du webhook PayDunya sur l’API, ex. `https://ton-backend.vercel.app/api/webhooks/paydunya`. Utilisée par `api/paydunia/hasPaied.js` pour relayer l’IPN depuis `https://<front>/paydunia/hasPaied`.
 - Le mode test / le stockage des données (`memory`, `json`, PostgreSQL) se configure **uniquement** sur le backend ; le front n’a pas de `MODE_CONFIG` local.
 
 ## Constantes
