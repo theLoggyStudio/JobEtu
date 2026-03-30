@@ -70,7 +70,7 @@ export function EtudiantDashboardPage() {
             {MATCHES_UI_CONFIG.pageTitle}
           </Link>
         </p>
-        <p style={{ marginBottom: 0 }}>Renseignez vos compétences et disponibilités.</p>
+        <p style={{ marginBottom: 0 }}>Renseignez vos compétences et disponibilités</p>
       </TextPanel>
       {!q ? (
         <TextPanel compact>
