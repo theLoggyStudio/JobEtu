@@ -17,6 +17,7 @@ import { CenteredPage } from '../../items/CenteredPage';
 import { TextPanel } from '../../items/TextPanel';
 import { RequiredAsterisk } from '../../items/Input';
 import { apiClient } from '../../api/client';
+import { DEFAULT_ENTREPRISE_QUESTIONNAIRE_STEPS } from '../../data/defaultEntrepriseQuestionnaireSteps';
 import { DEFAULT_ETUDIANT_QUESTIONNAIRE_STEPS } from '../../data/defaultEtudiantQuestionnaireSteps';
 import type { QuestionnaireDefinition, QuestionnaireDto, QuestionnaireFieldDef } from '../../types/questionnaire';
 
@@ -57,21 +58,10 @@ const TARGETS: QuestionnaireTarget[] = ['entreprise', 'etudiant'];
 
 const defaultSteps = (target: QuestionnaireTarget): QuestionnaireStepRow[] =>
   target === 'entreprise'
-    ? [
-        {
-          title: 'Tâche',
-          field: { name: generateTechnicalFieldName('Tâche'), label: 'Tâche', type: 'text', required: true },
-        },
-        {
-          title: 'Localisation',
-          field: {
-            name: generateTechnicalFieldName('Localisation'),
-            label: 'Localisation',
-            type: 'text',
-            required: true,
-          },
-        },
-      ]
+    ? DEFAULT_ENTREPRISE_QUESTIONNAIRE_STEPS.map((row) => ({
+        title: row.title,
+        field: { ...row.field },
+      }))
     : DEFAULT_ETUDIANT_QUESTIONNAIRE_STEPS.map((row) => ({
         title: row.title,
         field: { ...row.field },
