@@ -42,6 +42,9 @@ export const UI_CONFIG = {
     gray: '#f4f4f5',
     error: '#dc2626',
     success: '#16a34a',
+    /** Navbar : bleu clair (#5EC7F7) à gauche → bleu marine (`primary`) à droite. */
+    navBarGradient:
+      'linear-gradient(90deg, #5EC7F7 0%, #42a5e8 32%, #2563eb 62%, #1e3a8a 100%)',
   },
   radii: { sm: '6px', md: '10px', lg: '16px' },
   spacing: {

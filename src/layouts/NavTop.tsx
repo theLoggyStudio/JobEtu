@@ -11,7 +11,7 @@ const navTopStyle: CSSProperties = {
   alignItems: 'center',
   justifyContent: 'space-between',
   padding: `0 ${UI_CONFIG.spacing.pagePadding}`,
-  background: UI_CONFIG.colors.primary,
+  background: UI_CONFIG.colors.navBarGradient,
   color: UI_CONFIG.colors.white,
   position: 'sticky',
   top: 0,
