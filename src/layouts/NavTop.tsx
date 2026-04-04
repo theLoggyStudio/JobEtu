@@ -68,7 +68,7 @@ export function NavTop() {
               marginRight: '0.25rem',
             }}
           >
-            {homeSectionLink('#formulaire', 'Formulaire')}
+            {homeSectionLink('#', 'Bienvenue')}
             {homeSectionLink('#a-propos', 'À propos')}
             {homeSectionLink('#contact', 'Contact')}
           </div>
