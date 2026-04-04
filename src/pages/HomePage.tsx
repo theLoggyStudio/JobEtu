@@ -10,7 +10,6 @@ import { Typewriter } from '../items/Typewriter';
 const tagline =
   'Bienvenue sur OneJob — la mise en relation Entreprise, étudiant et Particulier.';
 
-/** Trois onglets comme sur la maquette (logo + onglets + contenu dans une seule carte). */
 type HomeTab = 'bienvenue' | 'apropos' | 'contact';
 
 const TAB_CONFIG: { id: HomeTab; label: string; hash: string }[] = [
@@ -40,6 +39,14 @@ function setHashForTab(tab: HomeTab): void {
 }
 
 const tabBorder = `1px solid ${UI_CONFIG.colors.black}28`;
+
+const cardShell: CSSProperties = {
+  padding: 0,
+  overflow: 'hidden',
+  maxWidth: 'min(100%, 640px)',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+};
 
 export function HomePage() {
   const [tab, setTab] = useState<HomeTab>(() =>
@@ -80,18 +87,8 @@ export function HomePage() {
 
   return (
     <CenteredPage width="lg">
-      <TextPanel
-        as="section"
-        elevated
-        style={{
-          padding: 0,
-          overflow: 'hidden',
-          maxWidth: 'min(100%, 640px)',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-        }}
-      >
-        {/* Logo — zone haute de la carte */}
+      {/* Panneau logo + onglets uniquement (maquette) */}
+      <TextPanel as="section" elevated style={cardShell}>
         <div
           style={{
             display: 'flex',
@@ -114,10 +111,9 @@ export function HomePage() {
           />
         </div>
 
-        {/* Onglets + contenu : une seule carte bordée (maquette) */}
         <div
           style={{
-            margin: '0 1rem 1.25rem',
+            margin: '0 1rem 1rem',
             border: tabBorder,
             borderRadius: UI_CONFIG.radii.md,
             overflow: 'hidden',
@@ -130,7 +126,6 @@ export function HomePage() {
             style={{
               display: 'flex',
               width: '100%',
-              borderBottom: tabBorder,
               boxSizing: 'border-box',
             }}
           >
@@ -150,13 +145,25 @@ export function HomePage() {
               </button>
             ))}
           </div>
-          <div
-            style={{
-              padding: '1.5rem 1.5rem 1.75rem',
-              minHeight: 'min(42vh, 420px)',
-              boxSizing: 'border-box',
-            }}
-          >
+        </div>
+      </TextPanel>
+
+      {/* Panneau d’affichage du contenu (séparé) */}
+      <TextPanel
+        as="section"
+        elevated
+        style={{
+          ...cardShell,
+          marginTop: '1.15rem',
+        }}
+      >
+        <div
+          style={{
+            padding: '1.5rem 1.5rem 1.75rem',
+            minHeight: 'min(42vh, 420px)',
+            boxSizing: 'border-box',
+          }}
+        >
           {tab === 'bienvenue' ? (
             <div
               role="tabpanel"
@@ -284,7 +291,6 @@ export function HomePage() {
               </p>
             </div>
           ) : null}
-          </div>
         </div>
       </TextPanel>
     </CenteredPage>
