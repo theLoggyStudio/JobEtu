@@ -14,7 +14,7 @@ import { apiClient } from '../../api/client';
 import { Alert } from '../../items/Alert';
 import { Button } from '../../items/Button';
 import { CenteredPage } from '../../items/CenteredPage';
-import { TextPanel } from '../../items/TextPanel';
+import { Panel } from '../../items/Panel';
 import { Table, type TableColumn } from '../../items/Table';
 import type { AdminMatchListItem, AdminMatchParty } from '../../types/match';
 
@@ -249,16 +249,16 @@ export function AdminMatchesPage() {
   if (loading) {
     return (
       <CenteredPage width="xl">
-        <TextPanel compact>
+        <Panel compact>
           <p style={{ textAlign: 'center', margin: 0 }}>{MESSAGE_CONFIG.loading}</p>
-        </TextPanel>
+        </Panel>
       </CenteredPage>
     );
   }
 
   return (
     <CenteredPage width="xl">
-      <TextPanel>
+      <Panel>
         <p>
           <Link to={ROUTE_PATHS.adminDashboard}>← Retour admin</Link>
         </p>
@@ -277,7 +277,7 @@ export function AdminMatchesPage() {
           pageSize={6}
           emptyLabel={ADMIN_MATCHES_UI_CONFIG.empty}
         />
-      </TextPanel>
+      </Panel>
     </CenteredPage>
   );
 }

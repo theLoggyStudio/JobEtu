@@ -14,7 +14,7 @@ import type { QuestionnaireTarget } from '@constants/types.constant';
 import { Alert } from '../../items/Alert';
 import { Button } from '../../items/Button';
 import { CenteredPage } from '../../items/CenteredPage';
-import { TextPanel } from '../../items/TextPanel';
+import { Panel } from '../../items/Panel';
 import { RequiredAsterisk } from '../../items/Input';
 import { apiClient } from '../../api/client';
 import { DEFAULT_ENTREPRISE_QUESTIONNAIRE_STEPS } from '../../data/defaultEntrepriseQuestionnaireSteps';
@@ -306,9 +306,9 @@ export function AdminQuestionnairesPage() {
   if (loading) {
     return (
       <CenteredPage width="lg">
-        <TextPanel compact>
+        <Panel compact>
           <p style={{ textAlign: 'center', margin: 0 }}>{MESSAGE_CONFIG.loading}</p>
-        </TextPanel>
+        </Panel>
       </CenteredPage>
     );
   }
@@ -325,7 +325,7 @@ export function AdminQuestionnairesPage() {
 
   return (
     <CenteredPage width="xl">
-      <TextPanel>
+      <Panel>
         <p>
           <Link to={ROUTE_PATHS.adminDashboard}>← Retour admin</Link>
         </p>
@@ -536,7 +536,7 @@ export function AdminQuestionnairesPage() {
             </Button>
           </div>
         </div>
-      </TextPanel>
+      </Panel>
     </CenteredPage>
   );
 }

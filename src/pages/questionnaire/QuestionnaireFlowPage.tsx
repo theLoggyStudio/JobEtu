@@ -25,7 +25,7 @@ import { Alert } from '../../items/Alert';
 import { Button } from '../../items/Button';
 import { CenteredPage } from '../../items/CenteredPage';
 import { RequiredAsterisk } from '../../items/Input';
-import { TextPanel } from '../../items/TextPanel';
+import { Panel } from '../../items/Panel';
 import { Typewriter } from '../../items/Typewriter';
 import type {
   QuestionnaireDto,
@@ -452,20 +452,20 @@ export function QuestionnaireFlowPage({ userType }: Props) {
   if (loading) {
     return (
       <CenteredPage width="sm">
-        <TextPanel compact>
+        <Panel compact>
           <p style={{ textAlign: 'center', margin: 0 }}>{MESSAGE_CONFIG.loading}</p>
-        </TextPanel>
+        </Panel>
       </CenteredPage>
     );
   }
   if (!q) {
     return (
       <CenteredPage width="sm">
-        <TextPanel compact>
+        <Panel compact>
           <p style={{ color: UI_CONFIG.colors.error, textAlign: 'center', margin: 0 }}>
             {MESSAGE_CONFIG.emptyList}
           </p>
-        </TextPanel>
+        </Panel>
       </CenteredPage>
     );
   }

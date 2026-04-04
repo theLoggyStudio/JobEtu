@@ -13,7 +13,7 @@ import type { QuestionnaireTarget } from '@constants/types.constant';
 import { apiClient } from '../../api/client';
 import { Button } from '../../items/Button';
 import { CenteredPage } from '../../items/CenteredPage';
-import { TextPanel } from '../../items/TextPanel';
+import { Panel } from '../../items/Panel';
 import { useAuthStore } from '../../store/authStore';
 import type { MatchMessageDto, MyMatchDto } from '../../types/match';
 
@@ -144,15 +144,15 @@ export function MyMatchesHubPage({ baseListPath, buildChatPath, dashboardPath, e
     if (loadingList) {
       return (
         <CenteredPage width="lg">
-          <TextPanel compact>
+          <Panel compact>
             <p style={{ textAlign: 'center', margin: 0 }}>{MESSAGE_CONFIG.loading}</p>
-          </TextPanel>
+          </Panel>
         </CenteredPage>
       );
     }
     return (
       <CenteredPage width="lg">
-        <TextPanel>
+        <Panel>
           <p>
             <Link to={dashboardPath}>← Tableau de bord</Link>
           </p>
@@ -202,7 +202,7 @@ export function MyMatchesHubPage({ baseListPath, buildChatPath, dashboardPath, e
             ))}
             </ul>
           )}
-        </TextPanel>
+        </Panel>
       </CenteredPage>
     );
   }
@@ -210,9 +210,9 @@ export function MyMatchesHubPage({ baseListPath, buildChatPath, dashboardPath, e
   if (loadingList && matches.length === 0) {
     return (
       <CenteredPage width="lg">
-        <TextPanel compact>
+        <Panel compact>
           <p style={{ textAlign: 'center', margin: 0 }}>{MESSAGE_CONFIG.loading}</p>
-        </TextPanel>
+        </Panel>
       </CenteredPage>
     );
   }
@@ -220,16 +220,16 @@ export function MyMatchesHubPage({ baseListPath, buildChatPath, dashboardPath, e
   if (!activeMatch) {
     return (
       <CenteredPage width="lg">
-        <TextPanel compact>
+        <Panel compact>
           <p style={{ textAlign: 'center', margin: 0 }}>{MESSAGE_CONFIG.loading}</p>
-        </TextPanel>
+        </Panel>
       </CenteredPage>
     );
   }
 
   return (
     <CenteredPage width="lg">
-      <TextPanel>
+      <Panel>
         <p>
           <Link to={dashboardPath}>← Tableau de bord</Link>
         </p>
@@ -340,7 +340,7 @@ export function MyMatchesHubPage({ baseListPath, buildChatPath, dashboardPath, e
             {sending ? MESSAGE_CONFIG.loading : MATCHES_UI_CONFIG.send}
           </Button>
         </div>
-      </TextPanel>
+      </Panel>
     </CenteredPage>
   );
 }

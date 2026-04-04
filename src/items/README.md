@@ -18,7 +18,7 @@ Conformément à **`.cursorrules`** à la racine du dépôt :
 | `Typewriter.tsx`      | `Typewriter`        | Texte affiché caractère par caractère    |
 | `CenteredPage.tsx`    | `CenteredPage`      | Contenu centré, largeur max               |
 | `FormPageShell.tsx`   | `FormPageShell`     | Carte formulaire (connexion / inscription), même entrée que `Panel` |
-| `Panel.tsx`           | `Panel`             | Cadre carte + entrée fondu depuis le bas   |
+| `Panel.tsx`           | `Panel`             | Carte unique : bordure, `elevated`, `compact`, `flush`, `animated`, `as` |
 | `BlurredBackground.tsx` | `BlurredBackground` | Fond global flou                         |
 | `Button.tsx`            | `Button`            | Boutons (variantes `primary`, `secondary`, `outline`, …) |
 
@@ -43,13 +43,21 @@ import { Button } from '@/items/Button';
 ```tsx
 import { Panel } from '@/items/Panel';
 
-<Panel>
-  <h2>Titre de section</h2>
-  <p>Contenu dans un cadre cohérent avec le design system.</p>
+<Panel elevated animated>
+  <h2>Section mise en avant</h2>
+  <p>Ombre + animation d’entrée.</p>
+</Panel>
+
+<Panel compact>
+  Message court ou état de chargement.
+</Panel>
+
+<Panel flush elevated as="section" style={{ maxWidth: 720 }}>
+  Padding interne géré par les enfants (ex. accueil avec logo + onglets).
 </Panel>
 
 <Panel flat style={{ padding: '1rem' }}>
-  Variante sans ombre.
+  Variante plate, sans ombre.
 </Panel>
 ```
 

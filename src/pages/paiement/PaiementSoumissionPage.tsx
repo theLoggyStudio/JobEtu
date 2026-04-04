@@ -6,7 +6,7 @@ import { PAYDUNYA_UI_CONFIG } from '@constants/paydunya.constant';
 import { apiClient } from '../../api/client';
 import { Button } from '../../items/Button';
 import { CenteredPage } from '../../items/CenteredPage';
-import { TextPanel } from '../../items/TextPanel';
+import { Panel } from '../../items/Panel';
 import { roleHomePath, useAuthStore } from '../../store/authStore';
 
 function sleep(ms: number): Promise<void> {
@@ -66,7 +66,7 @@ export function PaiementSoumissionPage() {
   if (phase === 'success') {
     return (
       <CenteredPage width="sm" softBg>
-        <TextPanel>
+        <Panel>
           <h2 style={{ color: UI_CONFIG.colors.success, marginTop: 0 }}>
             {PAYDUNYA_UI_CONFIG.paymentSuccessTitle}
           </h2>
@@ -77,7 +77,7 @@ export function PaiementSoumissionPage() {
           <Button type="button" variant="primary" onClick={() => navigate(home)} style={{ marginTop: 16 }}>
             Retour au tableau de bord
           </Button>
-        </TextPanel>
+        </Panel>
       </CenteredPage>
     );
   }
@@ -85,7 +85,7 @@ export function PaiementSoumissionPage() {
   if (phase === 'error') {
     return (
       <CenteredPage width="sm" softBg>
-        <TextPanel>
+        <Panel>
           <h2 style={{ color: UI_CONFIG.colors.error, marginTop: 0 }}>
             {PAYDUNYA_UI_CONFIG.paymentErrorTitle}
           </h2>
@@ -93,14 +93,14 @@ export function PaiementSoumissionPage() {
           <Button type="button" variant="outline" onClick={() => navigate(home)} style={{ marginTop: 16 }}>
             Retour au tableau de bord
           </Button>
-        </TextPanel>
+        </Panel>
       </CenteredPage>
     );
   }
 
   return (
     <CenteredPage width="sm" softBg>
-      <TextPanel compact>
+      <Panel compact>
         <h2 style={{ color: UI_CONFIG.colors.primary, marginTop: 0 }}>
           {PAYDUNYA_UI_CONFIG.paymentPendingTitle}
         </h2>
@@ -108,7 +108,7 @@ export function PaiementSoumissionPage() {
           {PAYDUNYA_UI_CONFIG.paymentPendingBody}
         </p>
         <p style={{ textAlign: 'center', marginTop: 12 }}>{MESSAGE_CONFIG.loading}</p>
-      </TextPanel>
+      </Panel>
     </CenteredPage>
   );
 }

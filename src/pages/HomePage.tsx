@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { APP_CONFIG, ROUTE_PATHS, UI_CONFIG } from '@constants/variable.constant';
 import logoHero from '../assets/LogoEtSlogan.png';
 import { CenteredPage } from '../items/CenteredPage';
-import { TextPanel } from '../items/TextPanel';
+import { Panel } from '../items/Panel';
 import { Typewriter } from '../items/Typewriter';
 
 const tagline =
@@ -43,7 +43,7 @@ const tabBorder = `1px solid ${UI_CONFIG.colors.black}28`;
 const cardShell: CSSProperties = {
   padding: 0,
   overflow: 'hidden',
-  maxWidth: 'min(100%, 640px)',
+  maxWidth: UI_CONFIG.layout.centeredLg,
   marginLeft: 'auto',
   marginRight: 'auto',
 };
@@ -88,7 +88,7 @@ export function HomePage() {
   return (
     <CenteredPage width="lg">
       {/* Panneau logo + onglets uniquement (maquette) */}
-      <TextPanel as="section" elevated style={cardShell}>
+      <Panel as="section" elevated flush animated style={cardShell}>
         <div
           style={{
             display: 'flex',
@@ -146,12 +146,14 @@ export function HomePage() {
             ))}
           </div>
         </div>
-      </TextPanel>
+      </Panel>
 
       {/* Panneau d’affichage du contenu (séparé) */}
-      <TextPanel
+      <Panel
         as="section"
         elevated
+        flush
+        animated
         style={{
           ...cardShell,
           marginTop: '1.15rem',
@@ -292,7 +294,7 @@ export function HomePage() {
             </div>
           ) : null}
         </div>
-      </TextPanel>
+      </Panel>
     </CenteredPage>
   );
 }

@@ -13,7 +13,6 @@ import {
 import { CenteredPage } from '../../items/CenteredPage';
 import { Panel } from '../../items/Panel';
 import { PostRegisterWelcomeModal } from '../../items/PostRegisterWelcomeModal';
-import { TextPanel } from '../../items/TextPanel';
 import { apiClient } from '../../api/client';
 import { usePostRegisterWelcomeModal } from '../../hooks/usePostRegisterWelcomeModal';
 import type { QuestionnaireDto } from '../../types/questionnaire';
@@ -46,18 +45,18 @@ export function EntrepriseDashboardPage() {
   if (loading) {
     return (
       <CenteredPage width="md">
-        <TextPanel compact>
+        <Panel compact>
           <p style={{ textAlign: 'center', margin: 0 }}>{MESSAGE_CONFIG.loading}</p>
-        </TextPanel>
+        </Panel>
       </CenteredPage>
     );
   }
   if (error) {
     return (
       <CenteredPage width="md">
-        <TextPanel compact>
+        <Panel compact>
           <p style={{ color: UI_CONFIG.colors.error, textAlign: 'center', margin: 0 }}>{error}</p>
-        </TextPanel>
+        </Panel>
       </CenteredPage>
     );
   }
@@ -73,7 +72,7 @@ export function EntrepriseDashboardPage() {
         questionnairePath={questionnairePath}
         formCtaLabel="Ouvrir le formulaire entreprise"
       />
-      <TextPanel style={{ marginBottom: '1rem' }}>
+      <Panel style={{ marginBottom: '1rem' }}>
         <h2 style={{ color: UI_CONFIG.colors.primary, marginTop: 0 }}>Espace entreprise</h2>
         <p style={{ marginBottom: '0.75rem' }}>
           <Link to={ROUTE_PATHS.entrepriseMatches} style={{ fontWeight: 600, color: UI_CONFIG.colors.secondary }}>
@@ -81,13 +80,13 @@ export function EntrepriseDashboardPage() {
           </Link>
         </p>
         <p style={{ marginBottom: 0 }}>Remplissez le formulaire entreprise pour décrire votre besoin.</p>
-      </TextPanel>
+      </Panel>
       {!q ? (
-        <TextPanel compact>
+        <Panel compact>
           <p style={{ margin: 0 }}>{MESSAGE_CONFIG.emptyList}</p>
-        </TextPanel>
+        </Panel>
       ) : (
-        <Panel>
+        <Panel elevated animated>
           <strong style={{ display: 'block', fontSize: '1.05rem', marginBottom: q.description ? 8 : 12 }}>
             {q.title}
           </strong>

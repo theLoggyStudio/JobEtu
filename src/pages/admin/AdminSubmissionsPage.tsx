@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { API_ENDPOINTS, MESSAGE_CONFIG, ROUTE_PATHS, UI_CONFIG } from '@constants/variable.constant';
 import { Button } from '../../items/Button';
 import { CenteredPage } from '../../items/CenteredPage';
-import { TextPanel } from '../../items/TextPanel';
+import { Panel } from '../../items/Panel';
 import { AnswersReadout, ProfileSnapshotReadout } from '../../items/SubmissionDetailReadout';
 import { Table, type TableColumn } from '../../items/Table';
 import { apiClient } from '../../api/client';
@@ -79,16 +79,16 @@ export function AdminSubmissionsPage() {
   if (loading && items.length === 0) {
     return (
       <CenteredPage width="xl">
-        <TextPanel compact>
+        <Panel compact>
           <p style={{ textAlign: 'center', margin: 0 }}>{MESSAGE_CONFIG.loading}</p>
-        </TextPanel>
+        </Panel>
       </CenteredPage>
     );
   }
 
   return (
     <CenteredPage width="xl">
-      <TextPanel>
+      <Panel>
         <p>
           <Link to={ROUTE_PATHS.adminDashboard}>← Retour admin</Link>
         </p>
@@ -125,7 +125,7 @@ export function AdminSubmissionsPage() {
         pageSize={8}
         emptyLabel={MESSAGE_CONFIG.emptyList}
       />
-      </TextPanel>
+      </Panel>
       {detail
         ? createPortal(
             <div
