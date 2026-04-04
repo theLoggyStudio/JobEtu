@@ -14,7 +14,7 @@ export function MainLayout() {
     padding: UI_CONFIG.spacing.pagePadding,
     position: 'relative',
     zIndex: UI_CONFIG.zIndex.pageAboveBg,
-    minHeight: 'calc(100dvh - var(--header-height, 64px))',
+    minHeight: 'calc(100dvh - var(--header-height, 88px))',
     backgroundColor: 'transparent',
     paddingBottom: navBottomVisible
       ? `calc(${UI_CONFIG.spacing.pagePadding} + ${UI_CONFIG.spacing.navBottomHeight})`

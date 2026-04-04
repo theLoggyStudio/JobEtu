@@ -27,7 +27,7 @@ export const BlurredBackground = () => {
         position: 'fixed',
         left: 0,
         right: 0,
-        top: 'var(--header-height, 64px)',
+        top: 'var(--header-height, 88px)',
         bottom: 0,
         width: '100%',
         minHeight: 0,

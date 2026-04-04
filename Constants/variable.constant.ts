@@ -45,7 +45,8 @@ export const UI_CONFIG = {
   },
   radii: { sm: '6px', md: '10px', lg: '16px' },
   spacing: {
-    headerHeight: '64px',
+    /** Hauteur navbar (logo marque jusqu’à ~80px). */
+    headerHeight: '88px',
     pagePadding: '1.25rem',
     /** Barre de copyright en bas (visible au scroll vers le bas) */
     navBottomHeight: '44px',
@@ -53,7 +54,7 @@ export const UI_CONFIG = {
   /** Pages formulaires (connexion / inscription) : centrage + carte */
   forms: {
     shellMaxWidth: 'min(100%, 660px)',
-    shellMinHeight: 'calc(100dvh - var(--header-height, 64px) - 3rem)',
+    shellMinHeight: 'calc(100dvh - var(--header-height, 88px) - 3rem)',
     cardPadding: '2rem 1.75rem',
     cardShadow: '0 16px 48px rgba(10, 10, 10, 0.1)',
     cardBorder: '1px solid rgba(10, 10, 10, 0.08)',

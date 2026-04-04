@@ -1,4 +1,4 @@
-import { ROUTE_PATHS, UI_CONFIG } from '@constants/variable.constant';
+import { UI_CONFIG } from '@constants/variable.constant';
 import { AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -17,13 +17,6 @@ export default function App() {
       img.src = src;
     }
   }, []);
-
-  /** Barre du haut plus haute sur l’accueil (logo agrandi) : aligne le fond flouté et les minHeight. */
-  useEffect(() => {
-    const home = location.pathname === ROUTE_PATHS.home;
-    const h = home ? '80px' : UI_CONFIG.spacing.headerHeight;
-    document.documentElement.style.setProperty('--header-height', h);
-  }, [location.pathname]);
 
   return (
     <div
