@@ -158,7 +158,12 @@ export function AccountPage() {
           defaultOpen
         >
           <Alert show={Boolean(profileError)} variant="error" message={profileError} />
-          <Alert show={Boolean(profileSuccess)} variant="success" message={profileSuccess} />
+          <Alert
+            show={Boolean(profileSuccess)}
+            variant="success"
+            message={profileSuccess}
+            onDismiss={() => setProfileSuccess('')}
+          />
           <form onSubmit={submitProfile(onUpdateProfile)} noValidate>
             <Input
               label="Nom affiché"

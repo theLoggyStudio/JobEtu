@@ -88,6 +88,8 @@ export const UI_CONFIG = {
     navBottom: 90,
     /** Barre de navigation supérieure (ex-nav header) */
     navTop: 100,
+    /** Alertes / toasts — au-dessus de la navbar */
+    toast: 1000,
     /** Modales / overlays plein écran — au-dessus de navTop (souvent via portail `body`) */
     modal: 5000,
     pageAboveBg: 10,

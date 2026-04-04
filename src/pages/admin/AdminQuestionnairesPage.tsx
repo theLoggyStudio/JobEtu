@@ -110,7 +110,8 @@ function dtoToForm(q: QuestionnaireDto): FormState {
     title: q.title,
     description: q.description ?? '',
     whatsappLink: q.whatsappLink ?? '',
-    isActive: q.isActive,
+    /** API ou JSON hérité : seul `false` explicite désactive le formulaire. */
+    isActive: q.isActive !== false,
     steps: steps.length > 0 ? steps : defaultSteps(q.targetUserType),
   };
 }
@@ -173,6 +174,7 @@ export function AdminQuestionnairesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [info, setInfo] = useState('');
+  const [pending, setPending] = useState<'save' | 'toggle' | null>(null);
 
   const load = useCallback(async () => {
     const { data } = await apiClient.get<{ items: QuestionnaireDto[] }>(API_ENDPOINTS.questionnaires);
@@ -278,13 +280,17 @@ export function AdminQuestionnairesPage() {
       setError(msg);
       return;
     }
+    setPending('save');
     try {
       const definition = buildDefinition(target, f);
-      await apiClient.post(API_ENDPOINTS.questionnaires, { definition });
+      const { data } = await apiClient.post<QuestionnaireDto>(API_ENDPOINTS.questionnaires, { definition });
+      setDraft((d) => ({ ...d, [target]: dtoToForm(data) }));
       setInfo(MESSAGE_CONFIG.successSaved);
       await load();
     } catch {
       setError('Erreur serveur ou données invalides (vérifiez les champs et le lien WhatsApp).');
+    } finally {
+      setPending(null);
     }
   };
 
@@ -296,16 +302,20 @@ export function AdminQuestionnairesPage() {
     }
     setError('');
     setInfo('');
+    setPending('toggle');
     try {
-      const { data } = await apiClient.patch<QuestionnaireDto>(API_ENDPOINTS.questionnaireToggle(id));
+      const { data } = await apiClient.post<QuestionnaireDto>(API_ENDPOINTS.questionnaireToggle(id));
       setInfo(
-        data.isActive
+        data.isActive !== false
           ? 'Formulaire activé : il apparaît sur le tableau de bord et le lien « Remplir / Ouvrir » est disponible.'
           : 'Formulaire désactivé : il n’est plus proposé aux utilisateurs (soumissions bloquées).'
       );
+      setDraft((d) => ({ ...d, [target]: { ...d[target], isActive: data.isActive !== false } }));
       await load();
     } catch {
       setError(MESSAGE_CONFIG.errorGeneric);
+    } finally {
+      setPending(null);
     }
   };
 
@@ -343,7 +353,7 @@ export function AdminQuestionnairesPage() {
           L’URL publique reste <code>/{tab}/questionnaire/{CANONICAL_QUESTIONNAIRE_SLUG[tab]}</code>.
         </p>
         <Alert show={Boolean(error)} variant="error" message={error} />
-        <Alert show={Boolean(info)} variant="success" message={info} />
+        <Alert show={Boolean(info)} variant="success" message={info} onDismiss={() => setInfo('')} />
 
         <div style={{ display: 'flex', gap: 8, marginTop: 16, flexWrap: 'wrap' }}>
           {TARGETS.map((t) => (
@@ -528,17 +538,28 @@ export function AdminQuestionnairesPage() {
             + Ajouter une étape
           </Button>
 
-          <div style={{ display: 'flex', gap: 12, marginTop: 24, flexWrap: 'wrap' }}>
-            <Button type="button" variant="primary" onClick={() => void save(tab)} style={{ padding: '0.65rem 1.2rem' }}>
-              Enregistrer ce formulaire
+          <div style={{ display: 'flex', gap: 12, marginTop: 24, flexWrap: 'wrap', alignItems: 'center' }}>
+            <Button
+              type="button"
+              variant="primary"
+              disabled={pending !== null}
+              onClick={() => void save(tab)}
+              style={{ padding: '0.65rem 1.2rem' }}
+            >
+              {pending === 'save' ? 'Enregistrement…' : 'Enregistrer ce formulaire'}
             </Button>
             <Button
               type="button"
               variant="outlineSecondary"
+              disabled={pending !== null || !f.id}
               onClick={() => void toggle(tab)}
               style={{ padding: '0.65rem 1.2rem' }}
             >
-              Activer / désactiver
+              {pending === 'toggle'
+                ? 'Mise à jour…'
+                : f.isActive
+                  ? 'Désactiver le formulaire (masquer aux utilisateurs)'
+                  : 'Activer le formulaire (visible sur les tableaux de bord)'}
             </Button>
           </div>
         </div>

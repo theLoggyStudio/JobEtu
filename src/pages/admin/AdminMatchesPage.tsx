@@ -269,7 +269,7 @@ export function AdminMatchesPage() {
           {ADMIN_MATCHES_UI_CONFIG.intro}
         </p>
         <Alert show={Boolean(error)} variant="error" message={error} />
-        <Alert show={Boolean(info)} variant="success" message={info} />
+        <Alert show={Boolean(info)} variant="success" message={info} onDismiss={() => setInfo('')} />
         <Table
           rows={items}
           columns={columns}

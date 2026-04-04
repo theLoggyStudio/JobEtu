@@ -91,11 +91,11 @@ export function EtudiantDashboardPage() {
               to={ROUTE_BUILDERS.etudiantQuestionnaire(q.slug)}
               style={{ fontWeight: 600, color: UI_CONFIG.colors.secondary }}
             >
-              Remplir un nouveau formulaire
+               ●Remplir un nouveau formulaire
             </Link>
           ) : (
             <span style={{ color: UI_CONFIG.forms.subtitleColor }}>
-              Remplir un nouveau formulaire — aucun questionnaire actif pour le moment
+               ●Remplir un nouveau formulaire — aucun questionnaire actif pour le moment
             </span>
           )}
         </p>
@@ -103,14 +103,14 @@ export function EtudiantDashboardPage() {
           <span style={{ display: 'block', fontWeight: 600, marginBottom: 6, color: UI_CONFIG.colors.primary }}>
             
           </span>
-          <span style={{ color: UI_CONFIG.forms.subtitleColor }}> · </span>
+          <span style={{ color: UI_CONFIG.forms.subtitleColor }}> ● </span>
           <a
             href={ONEJOB_EXTERNAL_LINKS.whatsappAdeDany}
             target="_blank"
             rel="noreferrer"
             style={{ color: UI_CONFIG.colors.secondary, fontWeight: 600 }}
           >
-            Apprendre une compétence avec l&apos;ADE (Nous Contacter via WhatsApp ) 
+             ● Apprendre une compétence avec nous (ADE: Nous Contacter via WhatsApp ) 
           </a>
         </p>
       </Panel>

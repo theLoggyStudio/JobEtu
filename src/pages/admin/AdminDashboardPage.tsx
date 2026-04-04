@@ -130,7 +130,12 @@ export function AdminDashboardPage() {
           subtitle="Seuls les comptes admin peuvent ajouter un autre admin. L’inscription publique ne permet pas ce rôle."
         >
           <Alert show={Boolean(apiError)} variant="error" message={apiError} />
-          <Alert show={Boolean(apiSuccess)} variant="success" message={apiSuccess} />
+          <Alert
+            show={Boolean(apiSuccess)}
+            variant="success"
+            message={apiSuccess}
+            onDismiss={() => setApiSuccess('')}
+          />
           <form onSubmit={handleSubmit(onCreateAdmin)} noValidate>
             <Input
               label="Nom affiché"
