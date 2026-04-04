@@ -58,3 +58,28 @@ export function roleHomePath(role: UserRole): string {
   if (role === ROLE_CONFIG.entreprise) return ROUTE_PATHS.entrepriseDashboard;
   return ROUTE_PATHS.etudiantDashboard;
 }
+
+/**
+ * Après connexion : n’utilise `from` que si la route correspond au rôle (évite une entreprise
+ * renvoyée vers /etudiant parce que la page protégée visitée avant login était celle d’un étudiant).
+ */
+export function loginRedirectPath(role: UserRole, fromPathname: string | undefined): string {
+  const from = fromPathname?.trim() || '';
+  if (!from || from === ROUTE_PATHS.login || from === ROUTE_PATHS.register) {
+    return roleHomePath(role);
+  }
+  if (role === ROLE_CONFIG.admin) {
+    if (from.startsWith('/admin') || from === ROUTE_PATHS.account) return from;
+    return roleHomePath(role);
+  }
+  if (role === ROLE_CONFIG.entreprise) {
+    if (from.startsWith('/entreprise') || from === ROUTE_PATHS.account || from.startsWith('/paiement/')) {
+      return from;
+    }
+    return roleHomePath(role);
+  }
+  if (from.startsWith('/etudiant') || from === ROUTE_PATHS.account || from.startsWith('/paiement/')) {
+    return from;
+  }
+  return roleHomePath(role);
+}

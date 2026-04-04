@@ -13,7 +13,7 @@ import { Alert } from '../items/Alert';
 import { Button } from '../items/Button';
 import { FormPageShell } from '../items/FormPageShell';
 import { Input } from '../items/Input';
-import { useAuthStore, roleHomePath } from '../store/authStore';
+import { useAuthStore, loginRedirectPath } from '../store/authStore';
 import type { AuthUser } from '../store/authStore';
 
 type FormValues = { email: string; password: string };
@@ -40,7 +40,7 @@ export function LoginPage() {
         payload
       );
       setAuth(data.user, data.token);
-      navigate(from ?? roleHomePath(data.user.role), { replace: true });
+      navigate(loginRedirectPath(data.user.role, from), { replace: true });
     } catch {
       setApiError(MESSAGE_CONFIG.errorGeneric);
     }

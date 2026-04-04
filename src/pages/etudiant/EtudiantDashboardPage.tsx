@@ -13,6 +13,7 @@ import {
   WHATSAPP_CONFIG,
 } from '@constants/variable.constant';
 import { CenteredPage } from '../../items/CenteredPage';
+import { DashboardSegmentNav } from '../../items/DashboardSegmentNav';
 import { Panel } from '../../items/Panel';
 import { PostRegisterWelcomeModal } from '../../items/PostRegisterWelcomeModal';
 import { apiClient } from '../../api/client';
@@ -80,9 +81,22 @@ export function EtudiantDashboardPage() {
       />
       <Panel style={{ marginBottom: '1rem' }}>
         <h2 style={{ color: UI_CONFIG.colors.primary, marginTop: 0 }}>{spaceTitle}</h2>
-        <p style={{ marginBottom: '0.75rem' }}>
+        <DashboardSegmentNav basePath={ROUTE_PATHS.etudiantDashboard} />
+        <p
+          style={{
+            marginBottom: '0.75rem',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '0.65rem',
+            alignItems: 'center',
+          }}
+        >
           <Link to={ROUTE_PATHS.etudiantMatches} style={{ fontWeight: 600, color: UI_CONFIG.colors.secondary }}>
             {MATCHES_UI_CONFIG.pageTitle}
+          </Link>
+          <span style={{ color: UI_CONFIG.forms.subtitleColor }}>·</span>
+          <Link to={ROUTE_PATHS.account} style={{ fontWeight: 600, color: UI_CONFIG.colors.secondary }}>
+            Mon compte
           </Link>
         </p>
         <p style={{ marginBottom: '0.5rem' }}>

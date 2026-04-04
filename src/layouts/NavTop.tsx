@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { APP_CONFIG, ROUTE_PATHS, UI_CONFIG } from '@constants/variable.constant';
+import { APP_CONFIG, ROLE_CONFIG, ROUTE_PATHS, UI_CONFIG } from '@constants/variable.constant';
 import { Button } from '../items/Button';
 import { roleHomePath, useAuthStore } from '../store/authStore';
 import logoMark from '../assets/Logo.png';
@@ -84,9 +84,11 @@ export function NavTop() {
             <Link to={roleHomePath(user.role)} style={{ color: UI_CONFIG.colors.white }}>
               Tableau de bord
             </Link>
-            <Link to={ROUTE_PATHS.account} style={{ color: UI_CONFIG.colors.white }}>
-              Mon compte
-            </Link>
+            {user.role === ROLE_CONFIG.admin ? (
+              <Link to={ROUTE_PATHS.account} style={{ color: UI_CONFIG.colors.white }}>
+                Mon compte
+              </Link>
+            ) : null}
             <Button
               type="button"
               variant="inverseOutline"
