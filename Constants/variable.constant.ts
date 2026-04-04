@@ -24,11 +24,11 @@ export const APP_CONFIG = {
 /** Liens externes (WhatsApp). Renseigner dans `.env` : `VITE_ONEJOB_WHATSAPP_MEDA`, `VITE_ONEJOB_WHATSAPP_ADE_DANY`. */
 export const ONEJOB_EXTERNAL_LINKS = {
   /** Contact Meda (QR fin de formulaire, même base que l’offre ADE Meda si une seule variable). */
-  whatsappMeda: (import.meta.env.VITE_ONEJOB_WHATSAPP_MEDA as string | undefined)?.trim() || 'https://wa.me/221000000000',
+  whatsappMeda: (import.meta.env.VITE_ONEJOB_WHATSAPP_MEDA as string | undefined)?.trim() || 'https://wa.me/221774585396',
   whatsappAdeMeda:
-    (import.meta.env.VITE_ONEJOB_WHATSAPP_MEDA as string | undefined)?.trim() || 'https://wa.me/221000000000',
+    (import.meta.env.VITE_ONEJOB_WHATSAPP_MEDA as string | undefined)?.trim() || 'https://wa.me/221774585396',
   whatsappAdeDany:
-    (import.meta.env.VITE_ONEJOB_WHATSAPP_ADE_DANY as string | undefined)?.trim() || 'https://wa.me/221000000000',
+    (import.meta.env.VITE_ONEJOB_WHATSAPP_ADE_DANY as string | undefined)?.trim() || 'https://wa.me/2217779860260',
 } as const;
 
 export const UI_CONFIG = {

@@ -85,7 +85,6 @@ export function EtudiantDashboardPage() {
             {MATCHES_UI_CONFIG.pageTitle}
           </Link>
         </p>
-        <p style={{ marginBottom: '0.65rem' }}>Renseignez vos compétences et disponibilités</p>
         <p style={{ marginBottom: '0.5rem' }}>
           {q ? (
             <Link
@@ -102,16 +101,8 @@ export function EtudiantDashboardPage() {
         </p>
         <p style={{ marginBottom: 0, fontSize: '0.95rem', lineHeight: 1.5 }}>
           <span style={{ display: 'block', fontWeight: 600, marginBottom: 6, color: UI_CONFIG.colors.primary }}>
-            Apprendre une compétence avec l&apos;ADE (WhatsApp)
+            
           </span>
-          <a
-            href={ONEJOB_EXTERNAL_LINKS.whatsappAdeMeda}
-            target="_blank"
-            rel="noreferrer"
-            style={{ color: UI_CONFIG.colors.secondary, fontWeight: 600 }}
-          >
-            Contacter Meda
-          </a>
           <span style={{ color: UI_CONFIG.forms.subtitleColor }}> · </span>
           <a
             href={ONEJOB_EXTERNAL_LINKS.whatsappAdeDany}
@@ -119,7 +110,7 @@ export function EtudiantDashboardPage() {
             rel="noreferrer"
             style={{ color: UI_CONFIG.colors.secondary, fontWeight: 600 }}
           >
-            Contacter Dr Dany
+            Apprendre une compétence avec l&apos;ADE (Nous Contacter via WhatsApp ) 
           </a>
         </p>
       </Panel>
