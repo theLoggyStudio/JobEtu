@@ -31,8 +31,8 @@ type FormValues = {
 
 const roleOptions: { value: UserRole; label: string }[] = [
   { value: ROLE_CONFIG.entreprise, label: 'Entreprise' },
-  { value: ROLE_CONFIG.etudiant, label: 'Étudiant' },
-  { value: ROLE_CONFIG.particulier, label: 'Particulier' },
+  /** Même parcours questionnaire côté API (cible `etudiant`). */
+  { value: ROLE_CONFIG.etudiant, label: 'Étudiant ou Particulier' },
 ];
 
 export function RegisterPage() {
@@ -73,7 +73,7 @@ export function RegisterPage() {
   return (
     <FormPageShell
       title="Inscription"
-      subtitle="Créez un compte entreprise, étudiant ou particulier pour accéder aux questionnaires OneJob."
+      subtitle="Créez un compte entreprise ou profil étudiant / particulier (même formulaire) pour accéder aux questionnaires OneJob."
     >
       <Alert show={Boolean(apiError)} variant="error" message={apiError} />
       <form onSubmit={handleSubmit(onSubmit)} noValidate>

@@ -61,7 +61,7 @@ export function PaiementSoumissionPage() {
     void runConfirm();
   }, [runConfirm]);
 
-  const home = user ? roleHomePath(user.role) : '/';
+  const home = user ? roleHomePath(user.role) : '/';  
 
   if (phase === 'success') {
     return (
