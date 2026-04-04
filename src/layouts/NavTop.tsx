@@ -26,9 +26,11 @@ export function NavTop() {
   const clearAuth = useAuthStore((s) => s.clearAuth);
   const navigate = useNavigate();
 
+  const isHome = location.pathname === ROUTE_PATHS.home;
+
   /** Sur accueil + parcours auth : pas de liens tableau de bord / compte / déconnexion (ni Connexion/Inscription dans la barre). */
   const hideNavActions =
-    location.pathname === ROUTE_PATHS.home ||
+    isHome ||
     location.pathname === ROUTE_PATHS.login ||
     location.pathname === ROUTE_PATHS.register;
 
@@ -41,8 +43,18 @@ export function NavTop() {
     </a>
   );
 
+  const navBarStyle: CSSProperties = isHome
+    ? {
+        ...navTopStyle,
+        minHeight: '80px',
+        height: 'auto',
+        paddingTop: '10px',
+        paddingBottom: '10px',
+      }
+    : navTopStyle;
+
   return (
-    <nav id="nav-top" aria-label="Navigation principale" style={navTopStyle}>
+    <nav id="nav-top" aria-label="Navigation principale" style={navBarStyle}>
       <Link
         to={ROUTE_PATHS.home}
         aria-label={APP_CONFIG.name}
@@ -52,16 +64,16 @@ export function NavTop() {
           src={logoMark}
           alt=""
           style={{
-            height: 58,
+            height: isHome ? 72 : 58,
             width: 'auto',
-            maxWidth: 'min(42vw, 200px)',
+            maxWidth: isHome ? 'min(52vw, 300px)' : 'min(42vw, 200px)',
             objectFit: 'contain',
             display: 'block',
           }}
         />
       </Link>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-        {location.pathname === ROUTE_PATHS.home ? (
+        {isHome ? (
           <div
             style={{
               display: 'flex',

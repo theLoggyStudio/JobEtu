@@ -94,17 +94,17 @@ export function HomePage() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            padding: '2rem 1.5rem 1.25rem',
+            padding: '2.25rem 1.5rem 1.5rem',
           }}
         >
           <img
             src={logoHero}
             alt={APP_CONFIG.name}
             style={{
-              maxWidth: 'min(260px, 88%)',
+              maxWidth: 'min(420px, 92%)',
               width: 'auto',
               height: 'auto',
-              maxHeight: 130,
+              maxHeight: 220,
               objectFit: 'contain',
               display: 'block',
             }}
