@@ -25,7 +25,7 @@ export const CenteredPage = ({ children, width = 'md', softBg }: CenteredPagePro
         boxSizing: 'border-box',
         ...(softBg
           ? {
-              minHeight: 'calc(100dvh - var(--header-height, 88px) - 2.5rem)',
+              minHeight: 'calc(100dvh - var(--header-height, 58px) - 2.5rem)',
               padding: `${UI_CONFIG.spacing.pagePadding} 0`,
               background: 'transparent',
             }

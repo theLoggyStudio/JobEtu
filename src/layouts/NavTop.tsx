@@ -16,6 +16,8 @@ const navTopStyle: CSSProperties = {
   position: 'sticky',
   top: 0,
   zIndex: UI_CONFIG.zIndex.navTop,
+  boxSizing: 'border-box',
+  overflow: 'hidden',
 };
 
 /** Barre de navigation supérieure (marque + liens compte). */
@@ -52,8 +54,9 @@ export function NavTop() {
           src={logoMark}
           alt=""
           style={{
-            height: 80,
+            height: 'auto',
             width: 'auto',
+            maxHeight: `calc(${UI_CONFIG.spacing.headerHeight} - 10px)`,
             maxWidth: 'min(50vw, 280px)',
             objectFit: 'contain',
             display: 'block',
