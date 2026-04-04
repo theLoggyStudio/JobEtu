@@ -28,7 +28,7 @@ export const ONEJOB_EXTERNAL_LINKS = {
   whatsappAdeMeda:
     (import.meta.env.VITE_ONEJOB_WHATSAPP_MEDA as string | undefined)?.trim() || 'https://wa.me/221774585396',
   whatsappAdeDany:
-    (import.meta.env.VITE_ONEJOB_WHATSAPP_ADE_DANY as string | undefined)?.trim() || 'https://wa.me/2217779860260',
+    (import.meta.env.VITE_ONEJOB_WHATSAPP_ADE_DANY as string | undefined)?.trim() || 'https://wa.me/221777986026',
 } as const;
 
 export const UI_CONFIG = {
