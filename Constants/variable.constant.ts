@@ -52,7 +52,7 @@ export const UI_CONFIG = {
   },
   /** Pages formulaires (connexion / inscription) : centrage + carte */
   forms: {
-    shellMaxWidth: 'min(100%, 440px)',
+    shellMaxWidth: 'min(100%, 660px)',
     shellMinHeight: 'calc(100dvh - var(--header-height, 64px) - 3rem)',
     cardPadding: '2rem 1.75rem',
     cardShadow: '0 16px 48px rgba(10, 10, 10, 0.1)',
@@ -63,11 +63,12 @@ export const UI_CONFIG = {
     subtitleColor: 'rgba(10, 10, 10, 0.65)',
   },
   /** Centrage horizontal du contenu (formulaires, dashboards, admin) */
+  /** Largeurs max +50 % par rapport à la base initiale (960 / 1080 / 1380 / 1620). */
   layout: {
-    centeredSm: 'min(100%, 640px)',
-    centeredMd: 'min(100%, 720px)',
-    centeredLg: 'min(100%, 920px)',
-    centeredXl: 'min(100%, 1080px)',
+    centeredSm: 'min(100%, 960px)',
+    centeredMd: 'min(100%, 1080px)',
+    centeredLg: 'min(100%, 1380px)',
+    centeredXl: 'min(100%, 1620px)',
   },
   motion: {
     typewriterMsPerChar: 42,
