@@ -61,7 +61,7 @@ export function EntrepriseDashboardPage() {
     );
   }
 
-  const q = list[0];
+  const q = list.find((item) => item.isActive) ?? list[0] ?? null;
   const questionnairePath = q ? ROUTE_BUILDERS.entrepriseQuestionnaire(q.slug) : null;
 
   return (

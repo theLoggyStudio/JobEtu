@@ -47,7 +47,7 @@ export const Tel = forwardRef<HTMLInputElement, TelProps>(function Tel(
           type="tel"
           inputMode="tel"
           autoComplete="tel"
-          placeholder="+221 771234567"
+          placeholder="+225 07 12 34 56 78"
           required={required}
           onChange={(e) => {
             const next = sanitizeInternationalTelInput(e.target.value);

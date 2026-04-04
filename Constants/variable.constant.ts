@@ -196,7 +196,7 @@ export const MESSAGE_CONFIG = {
   validationPasswordMin: 'Le mot de passe doit contenir au moins 8 caractères.',
   validationPhoneMax: 'Le numéro ne peut pas dépasser 40 caractères.',
   validationInternationalTel:
-    'Indicatif obligatoire : +XXX puis espace puis le numéro (ex. +221 771234567).',
+    'Indicatif obligatoire : +XXX puis espace puis le numéro (ex. +221 …, +225 …, +237 …).',
   validationFileMaxSize: 'Le fichier dépasse la taille maximale autorisée (4 Mo).',
   networkError: 'Problème réseau ou serveur indisponible.',
   matchPairConflict:

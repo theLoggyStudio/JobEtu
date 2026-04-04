@@ -62,7 +62,7 @@ export const DEFAULT_ETUDIANT_QUESTIONNAIRE_STEPS: DefaultEtudiantStepRow[] = [
     title: 'WhatsApp',
     field: {
       name: 'etu_whatsapp',
-      label: 'Numéro WhatsApp (format +221 771234567)',
+      label: 'Numéro WhatsApp (indicatif pays + numéro, ex. +221, +225, +237…)',
       type: 'tel',
       required: true,
     },

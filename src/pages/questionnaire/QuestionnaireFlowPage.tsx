@@ -267,7 +267,7 @@ function renderField(
         <input
           type="tel"
           inputMode="tel"
-          placeholder="+221 771234567"
+          placeholder="+225 07 12 34 56 78"
           {...register(field.name, {
             required: field.required ? MESSAGE_CONFIG.validationRequired : false,
             validate: (v) => {

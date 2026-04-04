@@ -8,7 +8,7 @@ import { Panel } from '../items/Panel';
 import { Typewriter } from '../items/Typewriter';
 
 const tagline =
-  'Bienvenue sur OneJob — la mise en relation Entreprise, étudiant et Particulier.';
+  'Bienvenue sur OneJob — la mise en relation Entreprise, étudiant et Particulier, pensée pour l’Afrique.';
 
 type HomeTab = 'bienvenue' | 'apropos' | 'contact';
 
@@ -185,10 +185,11 @@ export function HomePage() {
                 <Typewriter text={tagline} />
               </h1>
               <p style={{ fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                OneJob est une plateforme pensée pour le contexte sénégalais (indicatif +221) et au-delà : elle met
-                en relation les <strong>entreprises</strong> qui ont un besoin ponctuel ou récurrent, les{' '}
-                <strong>étudiants</strong> qui cherchent une mission ou un stage, et les{' '}
-                <strong>particuliers</strong> disponibles pour des missions adaptées. Les parcours s’appuient sur des
+                OneJob est une plateforme pensée pour l’<strong>Afrique</strong> : elle met en relation les{' '}
+                <strong>entreprises</strong> qui ont un besoin ponctuel ou récurrent, les <strong>étudiants</strong> qui
+                cherchent une mission ou un stage, et les <strong>particuliers</strong> disponibles pour des missions
+                adaptées. Les contacts passent par des numéros au <strong>format international</strong> (indicatif pays +
+                numéro), pour couvrir le continent sans se limiter à un seul pays. Les parcours s’appuient sur des
                 questionnaires clairs ; une équipe peut vous accompagner aussi via WhatsApp (formation ADE).
               </p>
               <p
@@ -269,8 +270,8 @@ export function HomePage() {
               <p style={{ lineHeight: 1.65, margin: 0, fontSize: '1.02rem' }}>
                 OneJob facilite les mises en relation professionnelles structurées : moins de friction pour les
                 entreprises, plus de visibilité pour les profils étudiants et particuliers. La démarche s’inscrit
-                dans une logique locale (dont le Sénégal et le +221) tout en restant ouverte aux formats
-                internationaux pour les numéros de téléphone.
+                dans les <strong>réalités des marchés africains</strong> tout en acceptant les formats internationaux
+                pour les numéros de téléphone, où que vous soyez sur le continent ou à l’étranger.
               </p>
             </div>
           ) : null}

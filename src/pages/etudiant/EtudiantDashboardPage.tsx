@@ -65,7 +65,7 @@ export function EtudiantDashboardPage() {
     );
   }
 
-  const q = list[0];
+  const q = list.find((item) => item.isActive) ?? list[0] ?? null;
   const spaceTitle =
     user?.role === ROLE_CONFIG.particulier ? 'Espace particulier' : 'Espace étudiant';
   const questionnairePath = q ? ROUTE_BUILDERS.etudiantQuestionnaire(q.slug) : null;

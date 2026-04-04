@@ -295,8 +295,14 @@ export function AdminQuestionnairesPage() {
       return;
     }
     setError('');
+    setInfo('');
     try {
-      await apiClient.patch(API_ENDPOINTS.questionnaireToggle(id));
+      const { data } = await apiClient.patch<QuestionnaireDto>(API_ENDPOINTS.questionnaireToggle(id));
+      setInfo(
+        data.isActive
+          ? 'Formulaire activé : il apparaît sur le tableau de bord et le lien « Remplir / Ouvrir » est disponible.'
+          : 'Formulaire désactivé : il n’est plus proposé aux utilisateurs (soumissions bloquées).'
+      );
       await load();
     } catch {
       setError(MESSAGE_CONFIG.errorGeneric);

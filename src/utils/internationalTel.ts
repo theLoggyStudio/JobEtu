@@ -1,12 +1,12 @@
 /**
  * Téléphone international : premier caractère « + », indicatif 1 à 4 chiffres,
  * espace, puis le reste numérique (6 à 15 chiffres).
- * Ex. +221 771234567
+ * Ex. +221 …, +225 …, +237 … (format international)
  */
 export const INTERNATIONAL_TEL_REGEX = /^\+\d{1,4}\s\d{6,15}$/;
 
 export const INTERNATIONAL_TEL_MESSAGE =
-  'Indicatif obligatoire : +XXX puis espace puis le numéro (ex. +221 771234567).';
+  'Indicatif obligatoire : +XXX puis espace puis le numéro (ex. +221 …, +225 …, +237 …).';
 
 /** Filtre la saisie : garde « + » en tête, chiffres et un seul espace séparateur. */
 export function sanitizeInternationalTelInput(raw: string): string {
