@@ -26,13 +26,11 @@ export function NavTop() {
   const clearAuth = useAuthStore((s) => s.clearAuth);
   const navigate = useNavigate();
 
-  /** Accueil + connexion : aucune action à droite (logo seul). */
+  /** Sur accueil + parcours auth : pas de liens tableau de bord / compte / déconnexion (ni Connexion/Inscription dans la barre). */
   const hideNavActions =
-    location.pathname === ROUTE_PATHS.home || location.pathname === ROUTE_PATHS.login;
-
-  /** Connexion ou inscription : jamais le bloc « connecté » (tableau de bord / compte / déconnexion). */
-  const isAuthPage =
-    location.pathname === ROUTE_PATHS.login || location.pathname === ROUTE_PATHS.register;
+    location.pathname === ROUTE_PATHS.home ||
+    location.pathname === ROUTE_PATHS.login ||
+    location.pathname === ROUTE_PATHS.register;
 
   const homeSectionLink = (hash: string, label: string) => (
     <a
@@ -78,7 +76,7 @@ export function NavTop() {
             {homeSectionLink('#contact', 'Contact')}
           </div>
         ) : null}
-        {hideNavActions ? null : user && token && !isAuthPage ? (
+        {hideNavActions ? null : user && token ? (
           <>
             <Link to={roleHomePath(user.role)} style={{ color: UI_CONFIG.colors.white }}>
               Tableau de bord
@@ -99,7 +97,7 @@ export function NavTop() {
               Déconnexion
             </Button>
           </>
-        ) : !hideNavActions && (!user || !token) ? (
+        ) : (
           <>
             <Link to={ROUTE_PATHS.login} style={{ color: UI_CONFIG.colors.white }}>
               Connexion
@@ -108,7 +106,7 @@ export function NavTop() {
               Inscription
             </Link>
           </>
-        ) : null}
+        )}
       </div>
     </nav>
   );
