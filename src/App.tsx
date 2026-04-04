@@ -1,10 +1,23 @@
 import { UI_CONFIG } from '@constants/variable.constant';
 import { AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { BlurredBackground } from './items/BlurredBackground';
+import { BlurredBackground, BLURRED_BACKGROUND_URLS } from './items/BlurredBackground';
 import { AppRouter } from './router/AppRouter';
+import logoMarkUrl from './assets/Logo.png?url';
+import logoHeroUrl from './assets/LogoEtSlogan.png?url';
+
 export default function App() {
   const location = useLocation();
+
+  useEffect(() => {
+    const urls = [logoMarkUrl, logoHeroUrl, ...BLURRED_BACKGROUND_URLS];
+    for (const src of urls) {
+      const img = new Image();
+      img.src = src;
+    }
+  }, []);
+
   return (
     <div
       style={{

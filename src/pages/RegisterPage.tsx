@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   API_ENDPOINTS,
   MESSAGE_CONFIG,
+  postRegisterAbsoluteDashboardUrl,
   ROLE_CONFIG,
   ROUTE_PATHS,
   UI_CONFIG,
@@ -15,8 +16,10 @@ import { Alert } from '../items/Alert';
 import { Button } from '../items/Button';
 import { FormPageShell } from '../items/FormPageShell';
 import { Input, RequiredAsterisk } from '../items/Input';
-import { useAuthStore, roleHomePath } from '../store/authStore';
+import { Tel } from '../items/Tel';
+import { useAuthStore } from '../store/authStore';
 import type { AuthUser } from '../store/authStore';
+import { INTERNATIONAL_TEL_REGEX } from '../utils/internationalTel';
 
 type FormValues = {
   email: string;
@@ -29,10 +32,10 @@ type FormValues = {
 const roleOptions: { value: UserRole; label: string }[] = [
   { value: ROLE_CONFIG.entreprise, label: 'Entreprise' },
   { value: ROLE_CONFIG.etudiant, label: 'Étudiant' },
+  { value: ROLE_CONFIG.particulier, label: 'Particulier' },
 ];
 
 export function RegisterPage() {
-  const navigate = useNavigate();
   const setAuth = useAuthStore((s) => s.setAuth);
   const [apiError, setApiError] = useState('');
 
@@ -45,6 +48,7 @@ export function RegisterPage() {
       email: '',
       password: '',
       displayName: '',
+      phone: '',
       role: ROLE_CONFIG.entreprise,
     },
   });
@@ -58,7 +62,9 @@ export function RegisterPage() {
         payload
       );
       setAuth(data.user, data.token);
-      navigate(roleHomePath(data.user.role), { replace: true });
+      const target = new URL(postRegisterAbsoluteDashboardUrl(data.user.role));
+      target.searchParams.set('welcome', '1');
+      window.location.assign(target.href);
     } catch {
       setApiError(MESSAGE_CONFIG.errorGeneric);
     }
@@ -67,7 +73,7 @@ export function RegisterPage() {
   return (
     <FormPageShell
       title="Inscription"
-      subtitle="Créez un compte entreprise ou étudiant pour accéder aux questionnaires."
+      subtitle="Créez un compte entreprise, étudiant ou particulier pour accéder aux questionnaires OneJob."
     >
       <Alert show={Boolean(apiError)} variant="error" message={apiError} />
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -77,12 +83,13 @@ export function RegisterPage() {
           {...register('displayName', { required: MESSAGE_CONFIG.validationRequired })}
           error={errors.displayName?.message}
         />
-        <Input
-          label="Téléphone"
-          type="tel"
-          autoComplete="tel"
+        <Tel
+          label="Téléphone (WhatsApp)"
+          required
           {...register('phone', {
-            maxLength: { value: 40, message: MESSAGE_CONFIG.validationPhoneMax },
+            required: MESSAGE_CONFIG.validationRequired,
+            validate: (v) =>
+              INTERNATIONAL_TEL_REGEX.test(String(v).trim()) || MESSAGE_CONFIG.validationInternationalTel,
           })}
           error={errors.phone?.message}
         />

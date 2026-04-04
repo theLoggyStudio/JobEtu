@@ -26,7 +26,7 @@ export function AppRouter() {
         <Route
           path={ROUTE_PATHS.account}
           element={
-            <ProtectedRoute roles={['admin', 'entreprise', 'etudiant']}>
+            <ProtectedRoute roles={['admin', 'entreprise', 'etudiant', 'particulier']}>
               <AccountPage />
             </ProtectedRoute>
           }
@@ -58,7 +58,7 @@ export function AppRouter() {
         <Route
           path={ROUTE_PATHS.etudiantDashboard}
           element={
-            <ProtectedRoute roles={['etudiant']}>
+            <ProtectedRoute roles={['etudiant', 'particulier']}>
               <EtudiantDashboardPage />
             </ProtectedRoute>
           }
@@ -66,7 +66,7 @@ export function AppRouter() {
         <Route
           path={ROUTE_PATHS.etudiantMatches}
           element={
-            <ProtectedRoute roles={['etudiant']}>
+            <ProtectedRoute roles={['etudiant', 'particulier']}>
               <EtudiantMatchesPage />
             </ProtectedRoute>
           }
@@ -74,7 +74,7 @@ export function AppRouter() {
         <Route
           path={ROUTE_PATHS.etudiantMatchChat}
           element={
-            <ProtectedRoute roles={['etudiant']}>
+            <ProtectedRoute roles={['etudiant', 'particulier']}>
               <EtudiantMatchesPage />
             </ProtectedRoute>
           }
@@ -114,7 +114,7 @@ export function AppRouter() {
         <Route
           path={ROUTE_PATHS.paiementSoumission}
           element={
-            <ProtectedRoute roles={['entreprise', 'etudiant']}>
+            <ProtectedRoute roles={['entreprise', 'etudiant', 'particulier']}>
               <PaiementSoumissionPage />
             </ProtectedRoute>
           }
@@ -130,7 +130,7 @@ export function AppRouter() {
         <Route
           path={ROUTE_PATHS.questionnaireEtudiant}
           element={
-            <ProtectedRoute roles={['etudiant']}>
+            <ProtectedRoute roles={['etudiant', 'particulier']}>
               <QuestionnaireFlowPage userType="etudiant" />
             </ProtectedRoute>
           }

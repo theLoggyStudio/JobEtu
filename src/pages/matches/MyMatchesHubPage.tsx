@@ -4,6 +4,7 @@ import {
   API_ENDPOINTS,
   MATCHES_UI_CONFIG,
   MESSAGE_CONFIG,
+  ROLE_CONFIG,
   ROUTE_PATHS,
   ROUTE_BUILDERS,
   UI_CONFIG,
@@ -52,7 +53,12 @@ export function MyMatchesHubPage({ baseListPath, buildChatPath, dashboardPath, e
   }, []);
 
   useEffect(() => {
-    if (user && user.role !== expectedRole) {
+    if (!user) return;
+    const okEtudiantSide =
+      expectedRole === 'etudiant' &&
+      (user.role === ROLE_CONFIG.etudiant || user.role === ROLE_CONFIG.particulier);
+    const ok = user.role === expectedRole || okEtudiantSide;
+    if (!ok) {
       navigate(dashboardPath, { replace: true });
     }
   }, [user, expectedRole, navigate, dashboardPath]);

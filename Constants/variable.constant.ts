@@ -1,4 +1,4 @@
-import type { FieldType, MatchStatus, QuestionnaireTarget } from './types.constant';
+import type { FieldType, MatchStatus, QuestionnaireTarget, UserRole } from './types.constant';
 
 /**
  * URL de base de l’API (où le front envoie les requêtes).
@@ -17,8 +17,18 @@ function resolveApiBaseURL(): string {
  * Toutes les variables modifiables de l'application frontend.
  */
 export const APP_CONFIG = {
-  name: 'JobEtu',
+  name: 'OneJob',
   version: '0.1.0',
+} as const;
+
+/** Liens externes (WhatsApp). Renseigner dans `.env` : `VITE_ONEJOB_WHATSAPP_MEDA`, `VITE_ONEJOB_WHATSAPP_ADE_DANY`. */
+export const ONEJOB_EXTERNAL_LINKS = {
+  /** Contact Meda (QR fin de formulaire, même base que l’offre ADE Meda si une seule variable). */
+  whatsappMeda: (import.meta.env.VITE_ONEJOB_WHATSAPP_MEDA as string | undefined)?.trim() || 'https://wa.me/221000000000',
+  whatsappAdeMeda:
+    (import.meta.env.VITE_ONEJOB_WHATSAPP_MEDA as string | undefined)?.trim() || 'https://wa.me/221000000000',
+  whatsappAdeDany:
+    (import.meta.env.VITE_ONEJOB_WHATSAPP_ADE_DANY as string | undefined)?.trim() || 'https://wa.me/221000000000',
 } as const;
 
 export const UI_CONFIG = {
@@ -105,7 +115,7 @@ export const ROUTE_PATHS = {
   adminMatches: '/admin/matches',
   questionnaireEntreprise: '/entreprise/questionnaire/:slug',
   questionnaireEtudiant: '/etudiant/questionnaire/:slug',
-  /** Retour après paiement PayDunya (`:sessionId` = id de session côté API). */
+  /** Ancienne route retour paiement (conservée pour les liens déjà émis). */
   paiementSoumission: '/paiement/soumission/:sessionId',
   entrepriseMatches: '/entreprise/matches',
   entrepriseMatchChat: '/entreprise/matches/:matchId',
@@ -140,14 +150,34 @@ export const API_ENDPOINTS = {
 } as const;
 
 export const SECURITY_CONFIG = {
-  tokenStorageKey: 'jobetu_access_token',
+  tokenStorageKey: 'onejob_access_token',
 } as const;
 
 export const ROLE_CONFIG = {
   admin: 'admin',
   entreprise: 'entreprise',
   etudiant: 'etudiant',
+  particulier: 'particulier',
 } as const;
+
+/**
+ * Après inscription : redirection absolue vers le front déployé (défaut [job-etu.vercel.app](https://job-etu.vercel.app)).
+ * En local, définir `VITE_POST_REGISTER_APP_ORIGIN=http://localhost:5173` pour garder le jeton (même origine).
+ */
+export const POST_REGISTER_APP_ORIGIN =
+  (import.meta.env.VITE_POST_REGISTER_APP_ORIGIN as string | undefined)?.trim().replace(/\/$/, '') ||
+  'https://job-etu.vercel.app';
+
+export function postRegisterAbsoluteDashboardUrl(role: UserRole): string {
+  const base = POST_REGISTER_APP_ORIGIN;
+  if (role === ROLE_CONFIG.entreprise) {
+    return `${base}${ROUTE_PATHS.entrepriseDashboard}`;
+  }
+  if (role === ROLE_CONFIG.admin) {
+    return `${base}${ROUTE_PATHS.adminDashboard}`;
+  }
+  return `${base}${ROUTE_PATHS.etudiantDashboard}`;
+}
 
 export const MESSAGE_CONFIG = {
   loading: 'Chargement…',
@@ -160,6 +190,8 @@ export const MESSAGE_CONFIG = {
   validationRequired: 'Ce champ est obligatoire.',
   validationPasswordMin: 'Le mot de passe doit contenir au moins 8 caractères.',
   validationPhoneMax: 'Le numéro ne peut pas dépasser 40 caractères.',
+  validationInternationalTel:
+    'Indicatif obligatoire : +XXX puis espace puis le numéro (ex. +221 771234567).',
   validationFileMaxSize: 'Le fichier dépasse la taille maximale autorisée (4 Mo).',
   networkError: 'Problème réseau ou serveur indisponible.',
   matchPairConflict:

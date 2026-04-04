@@ -13,6 +13,8 @@ import { Alert } from '../../items/Alert';
 import { Button } from '../../items/Button';
 import { CenteredPage } from '../../items/CenteredPage';
 import { Input } from '../../items/Input';
+import { Tel } from '../../items/Tel';
+import { INTERNATIONAL_TEL_REGEX } from '../../utils/internationalTel';
 import { SelectExpandPanel } from '../../items/SelectExpandPanel';
 import type { AuthUser } from '../../store/authStore';
 import { useAuthStore } from '../../store/authStore';
@@ -165,12 +167,15 @@ export function AccountPage() {
               {...regProfile('displayName', { required: MESSAGE_CONFIG.validationRequired })}
               error={profileFs.errors.displayName?.message}
             />
-            <Input
+            <Tel
               label="Téléphone"
-              type="tel"
               autoComplete="tel"
               {...regProfile('phone', {
-                maxLength: { value: 40, message: MESSAGE_CONFIG.validationPhoneMax },
+                validate: (v) => {
+                  const t = String(v).trim();
+                  if (t === '') return true;
+                  return INTERNATIONAL_TEL_REGEX.test(t) || MESSAGE_CONFIG.validationInternationalTel;
+                },
               })}
               error={profileFs.errors.phone?.message}
             />

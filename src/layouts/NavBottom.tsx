@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UI_CONFIG } from '@constants/variable.constant';
 
-const COPYRIGHT_LINE = 'Loggy-studio · JobEtu';
+const COPYRIGHT_LINE = 'Loggy-studio · OneJob';
 
 const SCROLL_DELTA = 8;
 const TOP_HIDE_THRESHOLD = 48;

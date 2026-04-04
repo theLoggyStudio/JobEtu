@@ -3,6 +3,7 @@ import { UI_CONFIG } from '@constants/variable.constant';
 
 export type TextPanelProps = {
   children: ReactNode;
+  id?: string;
   style?: CSSProperties;
   className?: string;
   /** Ombre type carte (défaut : non, bloc de texte discret) */
@@ -18,6 +19,7 @@ export type TextPanelProps = {
  */
 export function TextPanel({
   children,
+  id,
   style,
   className,
   elevated = false,
@@ -27,6 +29,7 @@ export function TextPanel({
   const Tag = (as ?? 'div') as ElementType;
   return (
     <Tag
+      id={id}
       className={className}
       style={{
         background: UI_CONFIG.colors.white,

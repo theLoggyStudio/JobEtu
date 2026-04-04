@@ -1,7 +1,7 @@
 /**
  * Types partagés côté frontend (dupliqués conceptuellement avec le back, sans import croisé).
  */
-export type UserRole = 'admin' | 'entreprise' | 'etudiant';
+export type UserRole = 'admin' | 'entreprise' | 'etudiant' | 'particulier';
 
 export type QuestionnaireTarget = 'entreprise' | 'etudiant';
 

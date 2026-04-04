@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useMemo, useState } from 'react';
 import type {
   FieldErrors,
@@ -11,10 +10,11 @@ import type {
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PAYDUNYA_UI_CONFIG } from '@constants/paydunya.constant';
+import QRCode from 'react-qr-code';
 import {
   API_ENDPOINTS,
   MESSAGE_CONFIG,
+  ONEJOB_EXTERNAL_LINKS,
   QUESTIONNAIRE_UI_CONFIG,
   ROLE_CONFIG,
   UI_CONFIG,
@@ -33,6 +33,12 @@ import type {
   QuestionnaireStepDef,
 } from '../../types/questionnaire';
 import { roleHomePath, useAuthStore } from '../../store/authStore';
+import type { AuthUser } from '../../store/authStore';
+import {
+  INTERNATIONAL_TEL_REGEX,
+  sanitizeInternationalTelInput,
+  splitInternationalTel,
+} from '../../utils/internationalTel';
 
 type Props = { userType: 'entreprise' | 'etudiant' };
 
@@ -70,6 +76,31 @@ function buildDefaultValues(steps: QuestionnaireDto['definition']['steps']): Rec
     }
   }
   return out;
+}
+
+function mergeProfileIntoDefaults(
+  base: Record<string, string>,
+  user: AuthUser | null
+): Record<string, string> {
+  if (!user) return base;
+  const next = { ...base };
+  const apply = (key: string, val: string | undefined) => {
+    if (!val || !Object.prototype.hasOwnProperty.call(next, key)) return;
+    if (String(next[key]).trim() !== '') return;
+    next[key] = val;
+  };
+  apply('etu_email', user.email);
+  apply('etu_email_secondaire', user.email);
+  apply('etu_nom_prenom', user.displayName ?? undefined);
+  apply('etu_whatsapp', user.phone ?? undefined);
+  apply('ent_email', user.email);
+  apply('ent_nom_responsable', user.displayName ?? undefined);
+  const split = splitInternationalTel(user.phone);
+  if (split) {
+    apply('ent_whatsapp_indicatif', split.indicatif);
+    apply('ent_whatsapp_numero', split.numero);
+  }
+  return next;
 }
 
 /** Référence stable quand `q` est null — évite une boucle reset → re-render (useMemo [steps]). */
@@ -229,6 +260,33 @@ function renderField(
     );
   }
 
+  if (field.type === 'tel') {
+    return (
+      <label key={field.name} style={{ display: 'block', marginBottom: '1rem' }}>
+        {labelPrefix}
+        <input
+          type="tel"
+          inputMode="tel"
+          placeholder="+221 771234567"
+          {...register(field.name, {
+            required: field.required ? MESSAGE_CONFIG.validationRequired : false,
+            validate: (v) => {
+              const t = String(v ?? '').trim();
+              if (!field.required && t === '') return true;
+              return INTERNATIONAL_TEL_REGEX.test(t) || MESSAGE_CONFIG.validationInternationalTel;
+            },
+            onChange: (e) => {
+              const el = e.target as HTMLInputElement;
+              el.value = sanitizeInternationalTelInput(el.value);
+            },
+          })}
+          style={inputStyle}
+        />
+        {err ? <span style={{ color: UI_CONFIG.colors.error, fontSize: '0.85rem' }}>{err}</span> : null}
+      </label>
+    );
+  }
+
   const base = {
     ...register(field.name, {
       required: field.required ? MESSAGE_CONFIG.validationRequired : false,
@@ -266,9 +324,7 @@ function renderField(
   const inputType =
     field.type === 'email'
       ? 'email'
-      : field.type === 'tel'
-        ? 'tel'
-        : field.type === 'number'
+      : field.type === 'number'
           ? 'number'
           : field.type === 'date'
             ? 'date'
@@ -296,7 +352,7 @@ export function QuestionnaireFlowPage({ userType }: Props) {
   const [loading, setLoading] = useState(true);
   const [submitError, setSubmitError] = useState('');
   const [done, setDone] = useState(false);
-  const [payRedirecting, setPayRedirecting] = useState(false);
+  const [submittingFinal, setSubmittingFinal] = useState(false);
 
   const expectedRole: QuestionnaireTarget =
     userType === 'entreprise' ? ROLE_CONFIG.entreprise : ROLE_CONFIG.etudiant;
@@ -326,7 +382,11 @@ export function QuestionnaireFlowPage({ userType }: Props) {
   }, [slug, expectedRole]);
 
   const steps = q?.definition.steps ?? EMPTY_STEPS;
-  const defaultValues = useMemo(() => buildDefaultValues(steps), [q?.id, steps]);
+  const mergedDefaults = useMemo(() => {
+    const s = q?.definition.steps ?? EMPTY_STEPS;
+    const base = buildDefaultValues(s);
+    return mergeProfileIntoDefaults(base, user);
+  }, [q?.id, user?.id, user?.email, user?.displayName, user?.phone]);
 
   const {
     register,
@@ -339,12 +399,12 @@ export function QuestionnaireFlowPage({ userType }: Props) {
     setError,
     clearErrors,
   } = useForm<Record<string, string>>({
-    defaultValues,
+    defaultValues: mergedDefaults,
   });
 
   useEffect(() => {
-    reset(defaultValues);
-  }, [defaultValues, reset]);
+    reset(mergedDefaults);
+  }, [mergedDefaults, reset]);
 
   useEffect(() => {
     setStepIndex(0);
@@ -370,38 +430,22 @@ export function QuestionnaireFlowPage({ userType }: Props) {
   const onFinal = handleSubmit(async (values) => {
     if (!q || !user || !slug) return;
     setSubmitError('');
-    setPayRedirecting(true);
-    const body = {
-      questionnaireId: q.id,
-      questionnaireSlug: slug,
-      answers: values,
-      profileSnapshot: {
-        email: user.email,
-        displayName: user.displayName,
-      },
+    setSubmittingFinal(true);
+    const profileSnapshot = {
+      email: user.email,
+      displayName: user.displayName,
     };
     try {
-      const { data } = await apiClient.post<{ checkoutUrl: string; sessionId: string }>(
-        API_ENDPOINTS.submissionsPaydunyaInit,
-        body
-      );
-      window.location.assign(data.checkoutUrl);
-    } catch (e) {
-      setPayRedirecting(false);
-      if (axios.isAxiosError(e) && e.response?.status === 501) {
-        try {
-          await apiClient.post(API_ENDPOINTS.submissions, {
-            questionnaireId: q.id,
-            answers: values,
-            profileSnapshot: body.profileSnapshot,
-          });
-          setDone(true);
-        } catch {
-          setSubmitError(MESSAGE_CONFIG.errorGeneric);
-        }
-        return;
-      }
+      await apiClient.post(API_ENDPOINTS.submissions, {
+        questionnaireId: q.id,
+        answers: values,
+        profileSnapshot,
+      });
+      setDone(true);
+    } catch {
       setSubmitError(MESSAGE_CONFIG.errorGeneric);
+    } finally {
+      setSubmittingFinal(false);
     }
   });
 
@@ -427,6 +471,7 @@ export function QuestionnaireFlowPage({ userType }: Props) {
   }
 
   if (done) {
+    const homeRole = user?.role ?? expectedRole;
     return (
       <CenteredPage width="sm" softBg>
         <div
@@ -440,11 +485,26 @@ export function QuestionnaireFlowPage({ userType }: Props) {
           }}
         >
           <h2 style={{ color: UI_CONFIG.colors.success, marginTop: 0 }}>{MESSAGE_CONFIG.successSaved}</h2>
+          <p style={{ color: UI_CONFIG.forms.subtitleColor, lineHeight: 1.5, marginBottom: '1rem' }}>
+            Pour la suite (prise de contact, consignes éventuelles), scannez le QR code ou ouvrez WhatsApp vers
+            Meda.
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+            <QRCode value={ONEJOB_EXTERNAL_LINKS.whatsappMeda} size={180} />
+          </div>
+          <a
+            href={ONEJOB_EXTERNAL_LINKS.whatsappMeda}
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: UI_CONFIG.colors.secondary, fontWeight: 600, display: 'block', marginBottom: '1.25rem' }}
+          >
+            Ouvrir WhatsApp (Meda)
+          </a>
           <Button
             type="button"
             variant="primary"
-            onClick={() => navigate(roleHomePath(user?.role ?? expectedRole))}
-            style={{ marginTop: 16, padding: '0.65rem 1.2rem' }}
+            onClick={() => navigate(roleHomePath(homeRole))}
+            style={{ padding: '0.65rem 1.2rem' }}
           >
             Retour au tableau de bord
           </Button>
@@ -504,11 +564,8 @@ export function QuestionnaireFlowPage({ userType }: Props) {
             lineHeight: 1.45,
           }}
         >
-          Après validation, vous serez redirigé vers PayDunya pour régler{' '}
-          <strong>
-            {PAYDUNYA_UI_CONFIG.submissionAmountFcfa} {PAYDUNYA_UI_CONFIG.currencyLabel}
-          </strong>
-          . L’envoi du formulaire est enregistré uniquement après paiement réussi.
+          Après validation, votre formulaire est enregistré sur OneJob. Un QR code vers le WhatsApp de Meda vous
+          sera proposé pour la suite des échanges.
         </p>
       ) : null}
       <form
@@ -538,13 +595,13 @@ export function QuestionnaireFlowPage({ userType }: Props) {
           <Button
             type="submit"
             variant="secondary"
-            disabled={payRedirecting}
+            disabled={submittingFinal}
             style={{ padding: '0.6rem 1.2rem' }}
           >
-            {payRedirecting
+            {submittingFinal
               ? MESSAGE_CONFIG.loading
               : stepIndex === totalSteps - 1
-                ? PAYDUNYA_UI_CONFIG.finalSubmitLabel
+                ? 'Envoyer le formulaire'
                 : 'Suivant'}
           </Button>
         </div>

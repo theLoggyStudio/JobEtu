@@ -12,11 +12,14 @@ import {
 } from '@constants/variable.constant';
 import { CenteredPage } from '../../items/CenteredPage';
 import { Panel } from '../../items/Panel';
+import { PostRegisterWelcomeModal } from '../../items/PostRegisterWelcomeModal';
 import { TextPanel } from '../../items/TextPanel';
 import { apiClient } from '../../api/client';
+import { usePostRegisterWelcomeModal } from '../../hooks/usePostRegisterWelcomeModal';
 import type { QuestionnaireDto } from '../../types/questionnaire';
 
 export function EntrepriseDashboardPage() {
+  const { open: welcomeOpen, onClose: welcomeClose } = usePostRegisterWelcomeModal();
   const [list, setList] = useState<QuestionnaireDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -60,9 +63,16 @@ export function EntrepriseDashboardPage() {
   }
 
   const q = list[0];
+  const questionnairePath = q ? ROUTE_BUILDERS.entrepriseQuestionnaire(q.slug) : null;
 
   return (
     <CenteredPage width="md">
+      <PostRegisterWelcomeModal
+        open={welcomeOpen}
+        onClose={welcomeClose}
+        questionnairePath={questionnairePath}
+        formCtaLabel="Ouvrir le formulaire entreprise"
+      />
       <TextPanel style={{ marginBottom: '1rem' }}>
         <h2 style={{ color: UI_CONFIG.colors.primary, marginTop: 0 }}>Espace entreprise</h2>
         <p style={{ marginBottom: '0.75rem' }}>

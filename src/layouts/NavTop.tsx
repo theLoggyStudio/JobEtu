@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { APP_CONFIG, ROUTE_PATHS, UI_CONFIG } from '@constants/variable.constant';
 import { Button } from '../items/Button';
 import { roleHomePath, useAuthStore } from '../store/authStore';
-import logoJobEtu from '../assets/Logo.png';
+import logoMark from '../assets/Logo.png';
 
 const navTopStyle: CSSProperties = {
   height: UI_CONFIG.spacing.headerHeight,
@@ -29,6 +29,15 @@ export function NavTop() {
   const hideNavActions =
     location.pathname === ROUTE_PATHS.home || location.pathname === ROUTE_PATHS.login;
 
+  const homeSectionLink = (hash: string, label: string) => (
+    <a
+      href={`${ROUTE_PATHS.home}${hash}`}
+      style={{ color: UI_CONFIG.colors.white, fontSize: '0.9rem', whiteSpace: 'nowrap' }}
+    >
+      {label}
+    </a>
+  );
+
   return (
     <nav id="nav-top" aria-label="Navigation principale" style={navTopStyle}>
       <Link
@@ -37,7 +46,7 @@ export function NavTop() {
         style={{ display: 'flex', alignItems: 'center', lineHeight: 0 }}
       >
         <img
-          src={logoJobEtu}
+          src={logoMark}
           alt=""
           style={{
             height: 58,
@@ -49,6 +58,21 @@ export function NavTop() {
         />
       </Link>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        {location.pathname === ROUTE_PATHS.home ? (
+          <div
+            style={{
+              display: 'flex',
+              gap: '0.65rem',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              marginRight: '0.25rem',
+            }}
+          >
+            {homeSectionLink('#formulaire', 'Formulaire')}
+            {homeSectionLink('#a-propos', 'À propos')}
+            {homeSectionLink('#contact', 'Contact')}
+          </div>
+        ) : null}
         {hideNavActions ? null : user && token ? (
           <>
             <Link to={roleHomePath(user.role)} style={{ color: UI_CONFIG.colors.white }}>

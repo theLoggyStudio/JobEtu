@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { BACKGROUND_CONFIG, UI_CONFIG } from '@constants/variable.constant';
 
-/** Fichiers dans `src/assets/backgrounds` — ajoutez des images sans toucher au code. */
-const backgroundUrls: string[] = Object.values(
+/** Fichiers dans `src/assets/backgrounds` — export pour préchargement (App). */
+export const BLURRED_BACKGROUND_URLS: string[] = Object.values(
   import.meta.glob<string>('../assets/backgrounds/**/*.{png,jpg,jpeg,webp,svg,gif}', {
     eager: true,
     query: '?url',
@@ -18,7 +18,7 @@ function pickRandomUrl(urls: readonly string[]): string | null {
 
 export const BlurredBackground = () => {
   const location = useLocation();
-  const selectedUrl = useMemo(() => pickRandomUrl(backgroundUrls), [location.key]);
+  const selectedUrl = useMemo(() => pickRandomUrl(BLURRED_BACKGROUND_URLS), [location.key]);
 
   return (
     <div

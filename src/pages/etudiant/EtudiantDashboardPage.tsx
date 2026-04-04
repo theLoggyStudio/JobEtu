@@ -5,6 +5,8 @@ import {
   FEATURE_FLAGS,
   MATCHES_UI_CONFIG,
   MESSAGE_CONFIG,
+  ONEJOB_EXTERNAL_LINKS,
+  ROLE_CONFIG,
   ROUTE_BUILDERS,
   ROUTE_PATHS,
   UI_CONFIG,
@@ -12,11 +14,16 @@ import {
 } from '@constants/variable.constant';
 import { CenteredPage } from '../../items/CenteredPage';
 import { Panel } from '../../items/Panel';
+import { PostRegisterWelcomeModal } from '../../items/PostRegisterWelcomeModal';
 import { TextPanel } from '../../items/TextPanel';
 import { apiClient } from '../../api/client';
+import { usePostRegisterWelcomeModal } from '../../hooks/usePostRegisterWelcomeModal';
+import { useAuthStore } from '../../store/authStore';
 import type { QuestionnaireDto } from '../../types/questionnaire';
 
 export function EtudiantDashboardPage() {
+  const user = useAuthStore((s) => s.user);
+  const { open: welcomeOpen, onClose: welcomeClose } = usePostRegisterWelcomeModal();
   const [list, setList] = useState<QuestionnaireDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -60,17 +67,62 @@ export function EtudiantDashboardPage() {
   }
 
   const q = list[0];
+  const spaceTitle =
+    user?.role === ROLE_CONFIG.particulier ? 'Espace particulier' : 'Espace étudiant';
+  const questionnairePath = q ? ROUTE_BUILDERS.etudiantQuestionnaire(q.slug) : null;
 
   return (
     <CenteredPage width="md">
+      <PostRegisterWelcomeModal
+        open={welcomeOpen}
+        onClose={welcomeClose}
+        questionnairePath={questionnairePath}
+        formCtaLabel="Ouvrir le formulaire"
+      />
       <TextPanel style={{ marginBottom: '1rem' }}>
-        <h2 style={{ color: UI_CONFIG.colors.primary, marginTop: 0 }}>Espace étudiant</h2>
+        <h2 style={{ color: UI_CONFIG.colors.primary, marginTop: 0 }}>{spaceTitle}</h2>
         <p style={{ marginBottom: '0.75rem' }}>
           <Link to={ROUTE_PATHS.etudiantMatches} style={{ fontWeight: 600, color: UI_CONFIG.colors.secondary }}>
             {MATCHES_UI_CONFIG.pageTitle}
           </Link>
         </p>
-        <p style={{ marginBottom: 0 }}>Renseignez vos compétences et disponibilités</p>
+        <p style={{ marginBottom: '0.65rem' }}>Renseignez vos compétences et disponibilités</p>
+        <p style={{ marginBottom: '0.5rem' }}>
+          {q ? (
+            <Link
+              to={ROUTE_BUILDERS.etudiantQuestionnaire(q.slug)}
+              style={{ fontWeight: 600, color: UI_CONFIG.colors.secondary }}
+            >
+              Remplir un nouveau formulaire
+            </Link>
+          ) : (
+            <span style={{ color: UI_CONFIG.forms.subtitleColor }}>
+              Remplir un nouveau formulaire — aucun questionnaire actif pour le moment
+            </span>
+          )}
+        </p>
+        <p style={{ marginBottom: 0, fontSize: '0.95rem', lineHeight: 1.5 }}>
+          <span style={{ display: 'block', fontWeight: 600, marginBottom: 6, color: UI_CONFIG.colors.primary }}>
+            Apprendre une compétence avec l&apos;ADE (WhatsApp)
+          </span>
+          <a
+            href={ONEJOB_EXTERNAL_LINKS.whatsappAdeMeda}
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: UI_CONFIG.colors.secondary, fontWeight: 600 }}
+          >
+            Contacter Meda
+          </a>
+          <span style={{ color: UI_CONFIG.forms.subtitleColor }}> · </span>
+          <a
+            href={ONEJOB_EXTERNAL_LINKS.whatsappAdeDany}
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: UI_CONFIG.colors.secondary, fontWeight: 600 }}
+          >
+            Contacter Dr Dany
+          </a>
+        </p>
       </TextPanel>
       {!q ? (
         <TextPanel compact>
