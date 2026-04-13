@@ -23,12 +23,33 @@ export const APP_CONFIG = {
 
 /** Liens externes (WhatsApp). Renseigner dans `.env` : `VITE_ONEJOB_WHATSAPP_MEDA`, `VITE_ONEJOB_WHATSAPP_ADE_DANY`. */
 export const ONEJOB_EXTERNAL_LINKS = {
-  /** Contact Meda (QR fin de formulaire, même base que l’offre ADE Meda si une seule variable). */
+  /** `VITE_ONEJOB_WHATSAPP_MEDA` — QR / lien fin de formulaire (souvent le même numéro que le 1er bouton ADE). */
   whatsappMeda: (import.meta.env.VITE_ONEJOB_WHATSAPP_MEDA as string | undefined)?.trim() || 'https://wa.me/221774585396',
   whatsappAdeMeda:
     (import.meta.env.VITE_ONEJOB_WHATSAPP_MEDA as string | undefined)?.trim() || 'https://wa.me/221774585396',
   whatsappAdeDany:
     (import.meta.env.VITE_ONEJOB_WHATSAPP_ADE_DANY as string | undefined)?.trim() || 'https://wa.me/221777986026',
+} as const;
+
+function envTrim(key: string): string | undefined {
+  const raw = (import.meta.env as Record<string, string | undefined>)[key];
+  return typeof raw === 'string' && raw.trim() !== '' ? raw.trim() : undefined;
+}
+
+/**
+ * Messages préremplis pour `?text=` sur les liens WhatsApp.
+ * Surcharge : `VITE_ONEJOB_WHATSAPP_PREFILL_FORM`, `…_ADE_1`, `…_ADE_2` (texte brut, une seule ligne ou plusieurs).
+ */
+export const ONEJOB_WHATSAPP_PREFILL = {
+  questionnaireFollowUp:
+    envTrim('VITE_ONEJOB_WHATSAPP_PREFILL_FORM') ??
+    'Bonjour, je viens de soumettre mon formulaire OneJob et je souhaite échanger pour la suite. Merci !',
+  adeLine1:
+    envTrim('VITE_ONEJOB_WHATSAPP_PREFILL_ADE_1') ??
+    'Bonjour, je souhaite des informations sur l’accompagnement ADE OneJob. Merci !',
+  adeLine2:
+    envTrim('VITE_ONEJOB_WHATSAPP_PREFILL_ADE_2') ??
+    'Bonjour, je souhaite des informations sur l’accompagnement ADE OneJob (deuxième ligne). Merci !',
 } as const;
 
 export const UI_CONFIG = {

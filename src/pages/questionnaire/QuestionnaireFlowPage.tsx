@@ -7,14 +7,15 @@ import type {
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form';
+import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import QRCode from 'react-qr-code';
 import {
   API_ENDPOINTS,
   MESSAGE_CONFIG,
   ONEJOB_EXTERNAL_LINKS,
+  ONEJOB_WHATSAPP_PREFILL,
   QUESTIONNAIRE_UI_CONFIG,
   ROLE_CONFIG,
   UI_CONFIG,
@@ -26,6 +27,7 @@ import { Button } from '../../items/Button';
 import { CenteredPage } from '../../items/CenteredPage';
 import { RequiredAsterisk } from '../../items/Input';
 import { Panel } from '../../items/Panel';
+import { WhatsAppContactTrigger } from '../../items/WhatsAppContactTrigger';
 import { Typewriter } from '../../items/Typewriter';
 import type {
   QuestionnaireDto,
@@ -35,7 +37,7 @@ import type {
 import { roleHomePath, useAuthStore } from '../../store/authStore';
 import type { AuthUser } from '../../store/authStore';
 import {
-  INTERNATIONAL_TEL_REGEX,
+  isValidInternationalTel,
   sanitizeInternationalTelInput,
   splitInternationalTel,
 } from '../../utils/internationalTel';
@@ -261,6 +263,14 @@ function renderField(
   }
 
   if (field.type === 'tel') {
+    const telRegister = register(field.name, {
+      required: field.required ? MESSAGE_CONFIG.validationRequired : false,
+      validate: (v) => {
+        const t = String(v ?? '').trim();
+        if (!field.required && t === '') return true;
+        return isValidInternationalTel(t) || MESSAGE_CONFIG.validationInternationalTel;
+      },
+    });
     return (
       <label key={field.name} style={{ display: 'block', marginBottom: '1rem' }}>
         {labelPrefix}
@@ -268,18 +278,14 @@ function renderField(
           type="tel"
           inputMode="tel"
           placeholder="+225 07 12 34 56 78"
-          {...register(field.name, {
-            required: field.required ? MESSAGE_CONFIG.validationRequired : false,
-            validate: (v) => {
-              const t = String(v ?? '').trim();
-              if (!field.required && t === '') return true;
-              return INTERNATIONAL_TEL_REGEX.test(t) || MESSAGE_CONFIG.validationInternationalTel;
-            },
-            onChange: (e) => {
-              const el = e.target as HTMLInputElement;
-              el.value = sanitizeInternationalTelInput(el.value);
-            },
-          })}
+          name={telRegister.name}
+          ref={telRegister.ref}
+          onBlur={telRegister.onBlur}
+          onChange={(e) => {
+            const el = e.target as HTMLInputElement;
+            el.value = sanitizeInternationalTelInput(el.value);
+            void telRegister.onChange(e);
+          }}
           style={inputStyle}
         />
         {err ? <span style={{ color: UI_CONFIG.colors.error, fontSize: '0.85rem' }}>{err}</span> : null}
@@ -442,8 +448,11 @@ export function QuestionnaireFlowPage({ userType }: Props) {
         profileSnapshot,
       });
       setDone(true);
-    } catch {
-      setSubmitError(MESSAGE_CONFIG.errorGeneric);
+    } catch (e) {
+      const data = axios.isAxiosError(e) ? (e.response?.data as { error?: string } | undefined) : undefined;
+      setSubmitError(
+        typeof data?.error === 'string' && data.error.trim() !== '' ? data.error : MESSAGE_CONFIG.errorGeneric
+      );
     } finally {
       setSubmittingFinal(false);
     }
@@ -486,20 +495,19 @@ export function QuestionnaireFlowPage({ userType }: Props) {
         >
           <h2 style={{ color: UI_CONFIG.colors.success, marginTop: 0 }}>{MESSAGE_CONFIG.successSaved}</h2>
           <p style={{ color: UI_CONFIG.forms.subtitleColor, lineHeight: 1.5, marginBottom: '1rem' }}>
-            Pour la suite (prise de contact, consignes éventuelles), scannez le QR code ou ouvrez WhatsApp vers
-            Meda.
+            Pour la suite (prise de contact, consignes éventuelles), ouvrez le lien ci-dessous : un message est
+            prérempli et un QR code permet d’ouvrir WhatsApp depuis votre téléphone.
           </p>
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-            <QRCode value={ONEJOB_EXTERNAL_LINKS.whatsappMeda} size={180} />
+          <div style={{ marginBottom: '1.25rem' }}>
+            <WhatsAppContactTrigger
+              baseUrl={ONEJOB_EXTERNAL_LINKS.whatsappMeda}
+              prefillMessage={ONEJOB_WHATSAPP_PREFILL.questionnaireFollowUp}
+              triggerLabel="WhatsApp — message prêt + QR code"
+              modalTitle="Suite du formulaire OneJob"
+              variant="secondary"
+              fullWidth
+            />
           </div>
-          <a
-            href={ONEJOB_EXTERNAL_LINKS.whatsappMeda}
-            target="_blank"
-            rel="noreferrer"
-            style={{ color: UI_CONFIG.colors.secondary, fontWeight: 600, display: 'block', marginBottom: '1.25rem' }}
-          >
-            Ouvrir WhatsApp (Meda)
-          </a>
           <Button
             type="button"
             variant="primary"
@@ -564,8 +572,8 @@ export function QuestionnaireFlowPage({ userType }: Props) {
             lineHeight: 1.45,
           }}
         >
-          Après validation, votre formulaire est enregistré sur OneJob. Un QR code vers le WhatsApp de Meda vous
-          sera proposé pour la suite des échanges.
+          Après validation, votre formulaire est enregistré sur OneJob. Un QR code vers notre WhatsApp vous sera
+          proposé pour la suite des échanges.
         </p>
       ) : null}
       <form

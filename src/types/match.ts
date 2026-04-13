@@ -15,6 +15,8 @@ export type MyMatchDto = {
 export type MatchMessageDto = {
   id: string;
   senderUserId: string;
+  /** Côté entreprise / étudiant dans le match (fourni par l’API). */
+  senderSide?: QuestionnaireTarget;
   body: string;
   createdAt: string;
 };

@@ -5,6 +5,7 @@ import {
   API_ENDPOINTS,
   MESSAGE_CONFIG,
   ONEJOB_EXTERNAL_LINKS,
+  ONEJOB_WHATSAPP_PREFILL,
   ROLE_CONFIG,
   ROUTE_BUILDERS,
   ROUTE_PATHS,
@@ -14,6 +15,7 @@ import { CenteredPage } from '../../items/CenteredPage';
 import { DashboardSegmentNav } from '../../items/DashboardSegmentNav';
 import { Panel } from '../../items/Panel';
 import { PostRegisterWelcomeModal } from '../../items/PostRegisterWelcomeModal';
+import { WhatsAppContactTrigger } from '../../items/WhatsAppContactTrigger';
 import { apiClient } from '../../api/client';
 import { usePostRegisterWelcomeModal } from '../../hooks/usePostRegisterWelcomeModal';
 import { useAuthStore } from '../../store/authStore';
@@ -125,14 +127,13 @@ export function EtudiantDashboardPage() {
               )}
             </li>
             <li style={{ borderBottom: 'none' }}>
-              <a
-                href={ONEJOB_EXTERNAL_LINKS.whatsappAdeMeda}
-                target="_blank"
-                rel="noreferrer"
-                style={{ ...actionRow, borderBottom: 'none' }}
-              >
-                Apprendre une compétence avec nous (ADE : nous contacter via WhatsApp)
-              </a>
+              <WhatsAppContactTrigger
+                baseUrl={ONEJOB_EXTERNAL_LINKS.whatsappAdeMeda}
+                prefillMessage={ONEJOB_WHATSAPP_PREFILL.adeLine1}
+                triggerLabel="Apprendre une compétence avec nous (ADE : nous contacter via WhatsApp)"
+                presentation="row"
+                triggerStyle={{ ...actionRow, borderBottom: 'none' }}
+              />
             </li>
           </ul>
         </nav>

@@ -287,7 +287,7 @@ export function HomePage() {
               <p style={{ lineHeight: 1.65, marginBottom: '0.75rem', fontSize: '1.02rem' }}>
                 Pour les formations et accompagnements ADE, utilisez les contacts WhatsApp proposés après votre
                 inscription ou scannez le QR code affiché à la fin de l’envoi du formulaire (prise de contact avec
-                Meda).
+                nous).
               </p>
               <p style={{ lineHeight: 1.6, margin: 0, color: UI_CONFIG.forms.subtitleColor, fontSize: '0.95rem' }}>
                 E-mail et identifiants de connexion : ceux renseignés sur votre compte OneJob.

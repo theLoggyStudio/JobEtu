@@ -1,9 +1,42 @@
 /**
  * Téléphone international : premier caractère « + », indicatif 1 à 4 chiffres,
  * espace, puis le reste numérique (6 à 15 chiffres).
- * Ex. +221 …, +225 …, +237 … (format international)
+ * Ex. +221 …, +225 …, +228 … (format international)
  */
 export const INTERNATIONAL_TEL_REGEX = /^\+\d{1,4}\s\d{6,15}$/;
+
+/**
+ * Uniformise la valeur avant test du regex : espaces insécables, espaces dans la partie nationale,
+ * ou absence d’espace après l’indicatif → forme `+CC NUM` (chiffres nationaux seuls).
+ */
+export function normalizeInternationalTelForValidation(raw: string): string {
+  let t = raw.trim().replace(/\u00a0/g, ' ');
+  if (!t.startsWith('+')) return t;
+  t = t.replace(/\s+/g, ' ');
+  const spaceIdx = t.indexOf(' ');
+  if (spaceIdx !== -1) {
+    const ccRaw = t.slice(1, spaceIdx).replace(/\D/g, '');
+    const nationalDigits = t.slice(spaceIdx + 1).replace(/\D/g, '');
+    if (ccRaw.length >= 1 && ccRaw.length <= 4 && nationalDigits.length >= 6 && nationalDigits.length <= 15) {
+      return `+${ccRaw} ${nationalDigits}`;
+    }
+  }
+  const digits = t.slice(1).replace(/\D/g, '');
+  for (let ccLen = 1; ccLen <= 4; ccLen += 1) {
+    const cc = digits.slice(0, ccLen);
+    const national = digits.slice(ccLen);
+    if (national.length >= 6 && national.length <= 15) {
+      return `+${cc} ${national}`;
+    }
+  }
+  return t;
+}
+
+export function isValidInternationalTel(raw: string): boolean {
+  const t = String(raw ?? '').trim();
+  if (t === '') return false;
+  return INTERNATIONAL_TEL_REGEX.test(normalizeInternationalTelForValidation(t));
+}
 
 export const INTERNATIONAL_TEL_MESSAGE =
   'Indicatif obligatoire : +XXX puis espace puis le numéro (ex. +221 …, +225 …, +237 …).';
@@ -37,8 +70,9 @@ export function splitInternationalTel(
   phone: string | null | undefined
 ): { indicatif: string; numero: string } | null {
   const p = phone?.trim();
-  if (!p || !INTERNATIONAL_TEL_REGEX.test(p)) return null;
-  const [, cc, num] = p.match(/^\+(\d{1,4})\s(\d{6,15})$/) ?? [];
+  const normalized = p ? normalizeInternationalTelForValidation(p) : '';
+  if (!normalized || !INTERNATIONAL_TEL_REGEX.test(normalized)) return null;
+  const [, cc, num] = normalized.match(/^\+(\d{1,4})\s(\d{6,15})$/) ?? [];
   if (!cc || !num) return null;
   return { indicatif: `+${cc}`, numero: num };
 }

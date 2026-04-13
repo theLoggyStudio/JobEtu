@@ -19,6 +19,23 @@ import type { MatchMessageDto, MyMatchDto } from '../../types/match';
 
 const POLL_MS = 4500;
 
+function messageSenderSide(
+  msg: MatchMessageDto,
+  match: MyMatchDto,
+  currentUserId: string | undefined
+): QuestionnaireTarget {
+  if (msg.senderSide === 'entreprise' || msg.senderSide === 'etudiant') return msg.senderSide;
+  const mine = String(currentUserId) === String(msg.senderUserId);
+  if (mine) return match.myRole;
+  return match.myRole === 'entreprise' ? 'etudiant' : 'entreprise';
+}
+
+function sideRoleLabel(side: QuestionnaireTarget): string {
+  return side === 'entreprise'
+    ? MATCHES_UI_CONFIG.counterpartyEntreprise
+    : MATCHES_UI_CONFIG.counterpartyEtudiant;
+}
+
 type Props = {
   baseListPath: string;
   buildChatPath: (matchId: string) => string;
@@ -292,7 +309,11 @@ export function MyMatchesHubPage({ baseListPath, buildChatPath, dashboardPath, e
             <p style={{ margin: 0 }}>{MESSAGE_CONFIG.loading}</p>
           ) : null}
           {messages.map((msg) => {
-            const mine = user?.id === msg.senderUserId;
+            const mine = String(user?.id) === String(msg.senderUserId);
+            const side = messageSenderSide(msg, activeMatch, user?.id);
+            const authorLine = mine
+              ? `${MATCHES_UI_CONFIG.you} (${sideRoleLabel(side)})`
+              : sideRoleLabel(side);
             return (
               <div
                 key={msg.id}
@@ -307,7 +328,7 @@ export function MyMatchesHubPage({ baseListPath, buildChatPath, dashboardPath, e
                 }}
               >
                 <div style={{ fontSize: '0.75rem', opacity: 0.85, marginBottom: 4 }}>
-                  {mine ? MATCHES_UI_CONFIG.you : MATCHES_UI_CONFIG.other} ·{' '}
+                  {authorLine} ·{' '}
                   {new Date(msg.createdAt).toLocaleString('fr-FR', {
                     dateStyle: 'short',
                     timeStyle: 'short',

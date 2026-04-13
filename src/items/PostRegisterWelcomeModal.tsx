@@ -1,6 +1,7 @@
-import { Modal } from './Modal';
+import { ONEJOB_EXTERNAL_LINKS, ONEJOB_WHATSAPP_PREFILL, UI_CONFIG } from '@constants/variable.constant';
 import { Button } from './Button';
-import { UI_CONFIG, ONEJOB_EXTERNAL_LINKS } from '@constants/variable.constant';
+import { Modal } from './Modal';
+import { WhatsAppContactTrigger } from './WhatsAppContactTrigger';
 
 type Props = {
   open: boolean;
@@ -21,30 +22,26 @@ export function PostRegisterWelcomeModal({ open, onClose, questionnairePath, for
         Bienvenue sur OneJob
       </h2>
       <p style={{ color: UI_CONFIG.forms.subtitleColor, lineHeight: 1.55, marginBottom: '1rem' }}>
-        Souhaitez-vous approfondir une compétence avec l’ADE — via WhatsApp (Meda ou Dr Dany) — ou compléter
+        Souhaitez-vous approfondir une compétence avec l’ADE — en nous contactant sur WhatsApp — ou compléter
         votre formulaire sur la plateforme ?
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-        <a
-          href={ONEJOB_EXTERNAL_LINKS.whatsappAdeMeda}
-          target="_blank"
-          rel="noreferrer"
-          style={{ textDecoration: 'none' }}
-        >
-          <Button type="button" variant="secondary" fullWidth>
-            WhatsApp — Meda (ADE)
-          </Button>
-        </a>
-        <a
-          href={ONEJOB_EXTERNAL_LINKS.whatsappAdeDany}
-          target="_blank"
-          rel="noreferrer"
-          style={{ textDecoration: 'none' }}
-        >
-          <Button type="button" variant="secondary" fullWidth>
-            WhatsApp — Dr Dany (ADE)
-          </Button>
-        </a>
+        <WhatsAppContactTrigger
+          baseUrl={ONEJOB_EXTERNAL_LINKS.whatsappAdeMeda}
+          prefillMessage={ONEJOB_WHATSAPP_PREFILL.adeLine1}
+          triggerLabel="WhatsApp — Meda (ADE)"
+          modalTitle="WhatsApp — ligne Meda (ADE)"
+          variant="secondary"
+          fullWidth
+        />
+        <WhatsAppContactTrigger
+          baseUrl={ONEJOB_EXTERNAL_LINKS.whatsappAdeDany}
+          prefillMessage={ONEJOB_WHATSAPP_PREFILL.adeLine2}
+          triggerLabel="WhatsApp — Dr Dany (ADE)"
+          modalTitle="WhatsApp — Dr Dany (ADE)"
+          variant="secondary"
+          fullWidth
+        />
         {questionnairePath ? (
           <a href={questionnairePath} style={{ textDecoration: 'none' }} onClick={onClose}>
             <Button type="button" variant="primary" fullWidth>

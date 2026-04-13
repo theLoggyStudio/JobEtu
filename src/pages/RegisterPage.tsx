@@ -19,7 +19,7 @@ import { Input, RequiredAsterisk } from '../items/Input';
 import { Tel } from '../items/Tel';
 import { useAuthStore } from '../store/authStore';
 import type { AuthUser } from '../store/authStore';
-import { INTERNATIONAL_TEL_REGEX } from '../utils/internationalTel';
+import { isValidInternationalTel } from '../utils/internationalTel';
 
 type FormValues = {
   email: string;
@@ -89,7 +89,7 @@ export function RegisterPage() {
           {...register('phone', {
             required: MESSAGE_CONFIG.validationRequired,
             validate: (v) =>
-              INTERNATIONAL_TEL_REGEX.test(String(v).trim()) || MESSAGE_CONFIG.validationInternationalTel,
+              isValidInternationalTel(String(v).trim()) || MESSAGE_CONFIG.validationInternationalTel,
           })}
           error={errors.phone?.message}
         />
